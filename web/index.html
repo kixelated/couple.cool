@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<head>
+	<!-- Ensures optimal rendering on mobile devices. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Optimal Internet Explorer compatibility -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+
+<body>
+  <script src="https://www.paypal.com/sdk/js?client-id=AanhMryMFsDNGenvSAVO830K8XonssAoPSp1awGJA92Wrj3iOhe6ZyyN6CsoZEYtHYINGYkIZZyK2ByJ">
+  </script>
+
+	<div id="paypal-button-container"></div>
+
+  <script>
+		paypal.Buttons({
+			createOrder: function() {
+				return fetch('/create-order', {
+					method: 'post',
+					headers: {
+						'content-type': 'application/json'
+					}
+				}).then((resp) => {
+					return resp.json()
+				}).then((data) => {
+					return data.orderID
+				})
+			},
+			onApprove: function(data) {
+				return fetch('/capture-order', {
+					method: 'post',
+					headers: {
+						'content-type': 'application/json',
+					},
+					body: JSON.stringify({
+						orderID: data.orderID,
+					})
+				}).then((resp) => {
+					return resp.json()
+				}).then((details) => {
+					alert('Transaction completed');
+				});
+			},
+    }).render('#paypal-button-container');
+  </script>
+</body>
