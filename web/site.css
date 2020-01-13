@@ -1,0 +1,23 @@
+.items {
+	display: flex;
+}
+
+.item {
+	border: 1px solid black;
+	margin: 10px;
+	padding: 10px;
+
+	width: 600px;
+}
+
+.item .name {
+	font-size: 24px;
+}
+
+.item .cost {
+	font-weight: bold;
+}
+
+input[type=email]:invalid:not(:focus) {
+	background: hsla(0, 90%, 70%, 1);
+}

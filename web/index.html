@@ -6,6 +6,8 @@
 	<!-- Optimal Internet Explorer compatibility -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
+	<link rel='stylesheet' href='site.css'/>
+
   <script src="https://www.paypal.com/sdk/js?client-id=AanhMryMFsDNGenvSAVO830K8XonssAoPSp1awGJA92Wrj3iOhe6ZyyN6CsoZEYtHYINGYkIZZyK2ByJ"></script>
 	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
@@ -13,43 +15,7 @@
 </head>
 
 <body>
-	<div id="registry"></div>
-
-	<div id="paypal-button-container"></div>
-
-  <script>
-		/*
-		paypal.Buttons({
-			createOrder: function() {
-				return fetch('/create-order', {
-					method: 'post',
-					headers: {
-						'content-type': 'application/json'
-					}
-				}).then((resp) => {
-					return resp.json()
-				}).then((data) => {
-					return data.orderID
-				})
-			},
-			onApprove: function(data) {
-				return fetch('/capture-order', {
-					method: 'post',
-					headers: {
-						'content-type': 'application/json',
-					},
-					body: JSON.stringify({
-						orderID: data.orderID,
-					})
-				}).then((resp) => {
-					return resp.json()
-				}).then((details) => {
-					alert('Transaction completed');
-				});
-			},
-    }).render('#paypal-button-container');
-		*/
-  </script>
+	<div id="app"></div>
 
 	<script src="./site.js"></script>
 </body>
