@@ -1,12 +1,31 @@
+const create = React.createElement;
+
 class RegistryItem extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = { toggle: false };
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	handleClick() {
+		this.setState(state => ({
+			toggle: !state.toggle,
+		}));
+	}
+
 	render() {
-		return (
-			<div className="item">
-				<div className="name">{this.props.item.Name.S}</div>
-				<div className="cost">${this.props.item.Cost.N}</div>
-				<div className="description">{this.props.item.Description.S}</div>
-			</div>
-		)
+		const name = create('div', { className: "name" }, this.props.item.Name.S)
+		const cost = create('div', { className: "cost" }, "$" + this.props.item.Cost.N)
+
+		let description;
+		if (this.state.toggle) {
+			description = create('div', { className: "description" }, this.props.item.Description.S);
+		}
+
+		const item = create('div', { className: "item", onClick: this.handleClick }, name, cost, description);
+
+		return item
 	}
 }
 
@@ -24,18 +43,17 @@ class Registry extends React.Component {
 
 	render() {
 		const items = this.state.items.map((item) =>
-			<RegistryItem item={item} key={item.Id.N} />
+			create(RegistryItem, {
+				item: item,
+				key: item.Id.N,
+			})
 		);
 
-		return (
-			<div className="items">
-				{items}
-			</div>
-		);
+		return create('div', { className: "items" }, items)
 	}
 }
 
-const registry = <Registry />
+const registry = create(Registry)
 const container = document.getElementById('registry');
 
 ReactDOM.render(registry, container);
