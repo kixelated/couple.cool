@@ -5,40 +5,24 @@ provider "aws" {
 
 resource "aws_dynamodb_table" "items" {
   name           = "registry.items"
-  billing_mode   = "PAY_PER_REQUEST"
+  billing_mode   = "PROVISIONED"
+	write_capacity = 1
+	read_capacity  = 5
 
   hash_key = "Id"
 
   attribute {
     name = "Id"
-    type = "N"
+    type = "S"
   }
 }
 
-resource "aws_dynamodb_table_item" "item_0" {
-  table_name = aws_dynamodb_table.items.name
-  hash_key   = aws_dynamodb_table.items.hash_key
+resource "aws_s3_bucket" "web" {
+  bucket = "luke-rebe-wedding-registry"
+  acl    = "public-read"
 
-  item = <<ITEM
-{
-	"Id": { "N": "0" },
-	"Name": { "S": "Rebe Acting Classes" },
-	"Description": { "S": "Rebe could star in MOVIES" },
-	"Cost": { "N": "200" }
-}
-ITEM
-}
-
-resource "aws_dynamodb_table_item" "item_1" {
-  table_name = aws_dynamodb_table.items.name
-  hash_key   = aws_dynamodb_table.items.hash_key
-
-  item = <<ITEM
-{
-	"Id": { "N": "1" },
-	"Name": { "S": "Penny Sausage" },
-	"Description": { "S": "Buy Penny from Andrew" },
-	"Cost": { "N": "1000" }
-}
-ITEM
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
 }

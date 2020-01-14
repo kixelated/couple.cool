@@ -17,7 +17,7 @@ app.get('/items', (req, res) => {
 
 	dynamodb.scan({
 		TableName: 'registry.items',
-		AttributesToGet: [ 'Id', 'Name', 'Description', 'Cost', 'Buyer', ],
+		AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'Buyer', ],
 	}).promise().then((data) => {
 		res.status(200).json(data.Items);
 	}).catch((err) => {

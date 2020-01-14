@@ -128,7 +128,12 @@ class RegistryItem extends React.Component {
 		const description = create('div', { className: "description" }, this.props.item.Description.S)
 		const buy = create(Buyer, { buyer: this.props.item.Buyer })
 
-		return create('div', { className: "item" }, name, cost, description, buy);
+		const style = {};
+		if (this.props.item.Image) {
+			style.backgroundImage = `url(${this.props.item.Image.S})`
+		}
+
+		return create('div', { className: "item", style: style }, name, cost, /*description, buy*/);
 	}
 }
 
@@ -151,7 +156,7 @@ class Registry extends React.Component {
 		const items = this.state.items.map((item) => {
 			return create(RegistryItem, {
 				item: item,
-				key: item.Id.N,
+				key: item.Id.S,
 			})
 		});
 
