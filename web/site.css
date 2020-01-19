@@ -12,23 +12,57 @@ body {
 	display: flex;
 	align-items: flex-end;
 
-	border-radius: 6px;
-
-	width: 300px;
-	height: 200px;
-	margin: 10px;
-
-	background-repeat: no-repeat;
+	width: 200px;
+	padding: 20px;
 }
 
-.item > .name, .item > .cost {
+.item a {
+	background: #fff;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+	padding: 10px;
+
+	text-decoration: none;
+	color: #333;
+
+	transform: rotate(-2deg);
+	transition: transform 0.15s linear, box-shadow 0.15s linear;
+}
+
+.items .item:nth-child(even) a {
+	transform: rotate(2deg);
+}
+
+.items .item:nth-child(3n) a {
+	transform: translate(-5px 0);
+}
+
+.items .item:nth-child(5n) a {
+	transform: translate(5px, 0) rotate(5deg);
+}
+
+.items .item:nth-child(8n) a {
+	transform: translate(5px, 8px);
+}
+
+.items .item:nth-child(11n) a {
+	transform: translate(-5px, 3px);
+}
+
+.item a:hover {
+	transform: scale(1.2) !important;
+	z-index: 5;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.item img {
+	width: 100%;
+	object-fit: cover;
+}
+
+.item .name, .item .cost {
 	padding: 8px;
 	font-size: 16px;
 	background: rgba(255, 255, 255, 0.75);
-}
-
-.item > .name {
-	flex-grow: 1;
 }
 
 input[type=email]:invalid:not(:focus) {

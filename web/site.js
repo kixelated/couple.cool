@@ -123,17 +123,20 @@ class RegistryItem extends React.Component {
 	}
 
 	render() {
+		const img = create('img', { src: this.props.item.Image.S })
 		const name = create('div', { className: "name" }, this.props.item.Name.S)
 		const cost = create('div', { className: "cost" }, "$" + this.props.item.Cost.N)
-		const description = create('div', { className: "description" }, this.props.item.Description.S)
-		const buy = create(Buyer, { buyer: this.props.item.Buyer })
 
-		const style = {};
-		if (this.props.item.Image) {
-			style.backgroundImage = `url(${this.props.item.Image.S})`
-		}
+		//const description = create('div', { className: "description" }, this.props.item.Description.S)
+		//const buy = create(Buyer, { buyer: this.props.item.Buyer })
 
-		return create('div', { className: "item", style: style }, name, cost, /*description, buy*/);
+		//const style = {};
+		//if (this.props.item.Image) {
+		//style.backgroundImage = `url(${this.props.item.Image.S})`
+		//}
+
+		const link = create('a', { href: "#" }, img, name, cost)
+		return create('div', { className: "item" }, link);
 	}
 }
 
