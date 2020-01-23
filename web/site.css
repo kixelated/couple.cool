@@ -2,6 +2,52 @@ body {
 	font-family: 'Gelasio', serif;
 }
 
+.overlay {
+	display: flex;
+	justify-content: center;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.75);
+
+	z-index: 10;
+}
+
+.overlay a.deselect {
+	flex-grow: 1;
+	cursor: initial;
+}
+
+.fullItem {
+	background: white;
+	max-width: 80%;
+}
+
+.fullItem img {
+	float: left;
+	margin: 12px;
+	width: 250px;
+	height: 250px;
+}
+
+.fullItem .cost {
+	float: right;
+	margin: 12px;
+}
+
+.fullItem .name {
+	font-size: 32px;
+	margin: 12px;
+	display: inline-block;
+}
+
+.fullItem .description {
+	margin: 12px;
+}
+
 .items {
 	display: flex;
 	flex-wrap: wrap;
@@ -26,6 +72,9 @@ body {
 
 	transform: rotate(-2deg);
 	transition: transform 0.15s linear, box-shadow 0.15s linear;
+}
+
+.item.selected {
 }
 
 .items .item:nth-child(even) a {
