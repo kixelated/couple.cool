@@ -36,10 +36,6 @@ class BuyForm extends React.Component {
 		this.setState({ phase: "form" })
 	}
 
-	setError(err) {
-		this.setState({ error: err })
-	}
-
 	render() {
 		if (this.state.error) {
 			return create("p", {}, "Error: " + this.state.error)
@@ -55,51 +51,85 @@ class BuyForm extends React.Component {
 
 		if (this.state.phase == "paypal")  {
 			const paypal = create(PaypalButton, {
-				createOrder: () => {
-					return fetch('/create-order', {
-						method: 'post',
-						headers: {
-							'content-type': 'application/json'
+				createOrder: (data, actions) => {
+					return actions.order.create({
+						payer: {
+							email_address: this.state.email,
 						},
-						body: JSON.stringify({
-							item: this.props.item,
-							email: this.state.email, // just to auto-populate paypal
-						})
-					}).then((resp) => {
-						return resp.json()
-					}).then((data) => {
-						if (data.error) {
-							throw data.error
+						purchase_units: [{
+							amount: {
+								currency_code: 'USD',
+								value: this.props.item.Cost.N,
+								breakdown: {
+									item_total: {
+										currency_code: 'USD',
+										value: this.props.item.Cost.N,
+									},
+								},
+							},
+							description: "Luke & Rebecca's wedding registry",
+							soft_descriptor: "L&R Wedding",
+							custom_id: this.props.item.Id.S,
+							items: [{
+								name: this.props.item.Name.S,
+								unit_amount: {
+									currency_code: 'USD',
+									value: this.props.item.Cost.N,
+								},
+								quantity: '1',
+								description: this.props.item.Description.S,
+								category: "DIGITAL_GOODS",
+							}],
+						}],
+						application_context: {
+							brand_name: "Luke & Rebecca Wedding Registry",
+							shipping_preference: "NO_SHIPPING",
+							user_action: "PAY_NOW",
+						},
+					}).catch((err) => {
+						console.error(err)
+						this.setState({ error: err })
+					})
+				},
+				onApprove: (data, actions) => {
+					console.log("authorizing")
+
+					return actions.order.authorize().then((authorization) => {
+						if (authorization.status != "COMPLETED") {
+							throw "unknown status: " + authorization.status
 						}
 
-						return data.orderID
-					}).catch(this.setError.bind(this))
-				},
-				onApprove: (data) => {
-					this.setState({ phase: "approving" })
+						return authorization.purchase_units[0].payments.authorizations[0].id
+					}).then((authorizationID) => {
+						this.setState({ phase: "approving" })
 
-					return fetch('/capture-order', {
-						method: 'post',
-						headers: {
-							'content-type': 'application/json',
-						},
-						body: JSON.stringify({
-							orderID: data.orderID,
-							item: this.state.item,
-							name: this.state.name,
-							email: this.state.email,
-							message: this.state.message,
+						return fetch('/purchase', {
+							method: 'post',
+							headers: {
+								'content-type': 'application/json',
+							},
+							body: JSON.stringify({
+								orderID: data.orderID,
+								authorizationID: authorizationID,
+								itemID: this.props.item.Id.S,
+
+								name: this.state.name,
+								email: this.state.email,
+								message: this.state.message,
+							}),
 						})
 					}).then((resp) => {
 						return resp.json()
-					}).then((details) => {
-						console.log(details)
-						if (data.error) {
-							throw data.error
+					}).then((info) => {
+						if (info.error) {
+							throw info.error
 						}
 
 						this.setState({ phase: "approved" })
-					}).catch(this.setError.bind(this))
+					}).catch((err) => {
+						console.error(err)
+						this.setState({ error: err })
+					})
 				},
 			})
 
@@ -167,8 +197,9 @@ class BuyFormMessage extends React.Component {
 		const input = create('textarea', {
 			value: this.props.value,
 			onChange: this.props.onChange,
-			placeholder: 'A message for the "happy" couple!',
+			placeholder: 'Leave a message for the "happy" couple!',
 			spellCheck: true,
+			required: true,
 		})
 
 		return create('div', { className: "message" }, text, input);
@@ -198,7 +229,7 @@ class FullItem extends React.Component {
 			e.preventDefault()
 		}
 
-		const form = create(BuyForm, { item: this.props.item.Id.S })
+		const form = create(BuyForm, { item: this.props.item })
 
 		const header = create('div', { className: "header" }, img, info)
 		const body = create('div', { className: "body" }, form)
