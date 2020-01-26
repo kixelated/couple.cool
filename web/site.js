@@ -2,6 +2,149 @@ const create = React.createElement;
 
 const PaypalButton = paypal.Buttons.driver("react", { React, ReactDOM })
 
+
+class BuyForm extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			name: "",
+			email: "",
+			message: "",
+			phase: "form",
+		}
+	}
+
+	setName(e) {
+		this.setState({ name: e.target.value })
+	}
+
+	setEmail(e) {
+		this.setState({ email: e.target.value })
+	}
+
+	setMessage(e) {
+		this.setState({ message: e.target.value })
+	}
+
+	goNext(e) {
+		e.preventDefault()
+		this.setState({ phase: "paypal" })
+	}
+
+	goBack(e) {
+		this.setState({ phase: "form" })
+	}
+
+	setError(err) {
+		this.setState({ error: err })
+	}
+
+	render() {
+		if (this.state.error) {
+			return create("p", {}, "Error: " + this.state.error)
+		}
+
+		if (this.state.phase == "approving" ) {
+			return create("p", {}, "Please wait...")
+		}
+
+		if (this.state.phase == "approved" ) {
+			return create("p", {}, "THANKS!")
+		}
+
+		if (this.state.phase == "paypal")  {
+			const paypal = create(PaypalButton, {
+				createOrder: () => {
+					return fetch('/create-order', {
+						method: 'post',
+						headers: {
+							'content-type': 'application/json'
+						},
+						body: JSON.stringify({
+							item: this.props.item,
+							email: this.state.email, // just to auto-populate paypal
+						})
+					}).then((resp) => {
+						return resp.json()
+					}).then((data) => {
+						if (data.error) {
+							throw data.error
+						}
+
+						return data.orderID
+					}).catch(this.setError.bind(this))
+				},
+				onApprove: (data) => {
+					this.setState({ phase: "approving" })
+
+					return fetch('/capture-order', {
+						method: 'post',
+						headers: {
+							'content-type': 'application/json',
+						},
+						body: JSON.stringify({
+							orderID: data.orderID,
+							item: this.state.item,
+							name: this.state.name,
+							email: this.state.email,
+							message: this.state.message,
+						})
+					}).then((resp) => {
+						return resp.json()
+					}).then((details) => {
+						console.log(details)
+						if (data.error) {
+							throw data.error
+						}
+
+						this.setState({ phase: "approved" })
+					}).catch(this.setError.bind(this))
+				},
+			})
+
+			const back = create("button", { onClick: this.goBack.bind(this) }, "Back") 
+
+			return create("div", {}, paypal, back)
+		}
+
+		const name = create(BuyFormName, {
+			value: this.state.name,
+			onChange: this.setName.bind(this),
+		})
+
+		const email = create(BuyFormEmail, {
+			value: this.state.email,
+			onChange: this.setEmail.bind(this),
+		})
+
+		const message = create(BuyFormMessage, {
+			value: this.state.message,
+			onChange: this.setMessage.bind(this),
+		})
+
+		const next = create("input", { type: "submit", value: "Next" })
+
+		return create('form', { onSubmit: this.goNext.bind(this) }, name, email, message, next);
+	}
+}
+
+class BuyFormName extends React.Component {
+	render() {
+		const text = create('span', {}, "Name:")
+
+		const input = create('input', {
+			type: 'text',
+			value: this.props.value,
+			onChange: this.props.onChange,
+			required: true,
+			spellCheck: false,
+		})
+
+		return create('div', { className: "name" }, text, input);
+	}
+}
+
 class BuyFormEmail extends React.Component {
 	render() {
 		const text = create('span', {}, "Email:")
@@ -10,78 +153,25 @@ class BuyFormEmail extends React.Component {
 			type: 'email',
 			value: this.props.value,
 			onChange: this.props.onChange,
+			required: true,
 		})
 
 		return create('div', { className: "email" }, text, input);
 	}
 }
 
-class BuyForm extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			email: "",
-		};
-	}
-
-	handleEmailChange(e) {
-		const email = e.target.value;
-
-		this.setState({
-			email: email,
-		})
-	}
-
+class BuyFormMessage extends React.Component {
 	render() {
-		const email = create(BuyFormEmail, {
-			value: this.state.email,
-			onChange: (e) => { this.setState({ email: e.target.value }) },
+		const text = create('span', {}, "Message:")
+
+		const input = create('textarea', {
+			value: this.props.value,
+			onChange: this.props.onChange,
+			placeholder: 'A message for the "happy" couple!',
+			spellCheck: true,
 		})
 
-		return create('form', {}, email);
-	}
-}
-
-class Buyer extends React.Component {
-	constructor(props) {
-		super(props);
-
-		/*
-		this.state = {
-			buyer: props.buyer,
-			step: "SHOW",
-		};
-		*/
-	}
-
-	render() {
-		if (!this.props.buyer) return null
-
-		return "Purchased by " + this.props.buyer.S + "!";
-
-		/*
-		if (this.state.step == "SHOW") {
-			const onClick = (e) => {
-				this.setState({ step: "FORM" })
-				e.preventDefault()
-			}
-
-			return create('a', { href: "#buy", onClick: onClick }, 'Buy')
-		}
-
-		if (this.state.step == "FORM") {
-			//return create(BuyForm)
-		}
-
-		if (this.state.step == "APPROVING") {
-			return "Approving the purchase..."
-		}
-
-		if (this.state.step == "APPROVED") {
-			return "OMG THANKS"
-		}
-		*/
+		return create('div', { className: "message" }, text, input);
 	}
 }
 
@@ -91,56 +181,29 @@ class FullItem extends React.Component {
 	}
 
 	render() {
-		if (!this.props.item) return null
+		if (!this.props.item) {
+			return null
+		}
 
 		const img = create('img', { src: this.props.item.Image.S })
+
 		const name = create('div', { className: "name" }, this.props.item.Name.S)
 		const cost = create('div', { className: "cost" }, "$" + this.props.item.Cost.N)
-		const description = create('div', { className: "description" }, this.props.item.Description.S)
-		const buyer = create(Buyer, { buyer: this.props.item.Buyer })
+		const description = create('p', { className: "description" }, this.props.item.Description.S)
+
+		const info = create('div', { className: "info" }, name, cost, description)
 
 		const onClick = (e) => {
 			this.props.onDeselect()
-			return false
+			e.preventDefault()
 		}
 
-		const paypal = create(PaypalButton, {
-			createOrder: () => {
-				return fetch('/create-order', {
-					method: 'post',
-					headers: {
-						'content-type': 'application/json'
-					}
-				}).then((resp) => {
-					return resp.json()
-				}).then((data) => {
-					return data.orderID
-				}).catch((err) => {
-					this.setState({ error: err })
-				})
-			},
-			onApprove: (data) => {
-				this.setState({ step: "APPROVING" })
-				return fetch('/capture-order', {
-					method: 'post',
-					headers: {
-						'content-type': 'application/json',
-					},
-					body: JSON.stringify({
-						orderID: data.orderID,
-					})
-				}).then((resp) => {
-					return resp.json()
-				}).then((details) => {
-					this.setState({ step: "APPROVED" })
-				}).catch((err) => {
-					this.setState({ step: "FORM", error: err })
-				})
-			},
-		})
+		const form = create(BuyForm, { item: this.props.item.Id.S })
 
-		const container = create('div', { className: "fullItem" }, img, name, cost, buyer, description, paypal)
+		const header = create('div', { className: "header" }, img, info)
+		const body = create('div', { className: "body" }, form)
 
+		const container = create('div', { className: "fullItem" }, header, body)
 		const deselect = create('a', { className: "deselect", href: "#back", onClick: onClick })
 
 		const overlay = create('div', { className: "overlay" }, deselect, container, deselect)

@@ -48,7 +48,7 @@ ITEM
 			"Id": { "S": "sausage2" },
 			"Name": { "S": "Buy Penny" },
 			"Description": { "S": "yaaay penny" },
-			"Cost": { "N": "5000" },
+			"Cost": { "N": "4000" },
 			"Image": { "S": "http://${ aws_s3_bucket.web.bucket_regional_domain_name }/${ aws_s3_bucket_object.items["sausage2"].key }" }
 		}
 ITEM
@@ -99,7 +99,7 @@ ITEM
 
 resource "aws_s3_bucket_object" "items" {
 	bucket  = aws_s3_bucket.web.bucket
-  acl     = "public-read"
+	acl     = "public-read"
 
 	for_each = {
 		sausage = "images/sausage.png"

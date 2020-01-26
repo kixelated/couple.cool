@@ -24,28 +24,45 @@ body {
 .fullItem {
 	background: white;
 	max-width: 80%;
+	padding-top: 12px;
+	padding-left: 12px;
+	overflow: scroll;
 }
 
-.fullItem img {
+.fullItem .header {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.fullItem .header img {
 	float: left;
-	margin: 12px;
 	width: 250px;
 	height: 250px;
+	padding-right: 12px;
+	padding-bottom: 12px;
 }
 
-.fullItem .cost {
-	float: right;
-	margin: 12px;
+.fullItem .header .info {
+	flex-grow: 1;
+	padding-right: 12px;
+	padding-bottom: 12px;
 }
 
-.fullItem .name {
+.fullItem .header .name {
 	font-size: 32px;
-	margin: 12px;
-	display: inline-block;
+	font-weight: bold
 }
 
-.fullItem .description {
-	margin: 12px;
+.fullItem .header .cost {
+}
+
+.fullItem .header .description {
+}
+
+.fullItem .body {
+	padding-right: 12px;
+	padding-bottom: 12px;
 }
 
 .items {
@@ -114,6 +131,6 @@ body {
 	background: rgba(255, 255, 255, 0.75);
 }
 
-input[type=email]:invalid:not(:focus) {
+input[type=email]:invalid:not(:focus):not([value=""]) {
 	background: hsla(0, 90%, 70%, 1);
 }

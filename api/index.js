@@ -17,7 +17,7 @@ app.get('/items', (req, res) => {
 
 	dynamodb.scan({
 		TableName: 'registry.items',
-		AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'Buyer', ],
+		AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost' ],
 	}).promise().then((data) => {
 		res.status(200).json(data.Items);
 	}).catch((err) => {
@@ -26,75 +26,129 @@ app.get('/items', (req, res) => {
 	});
 })
 
-app.post('/create-order', (req, res) => {
-	// https://developer.paypal.com/docs/api/orders/v2/#orders_create
-	const request = new paypal.sdk.orders.OrdersCreateRequest();
+app.post('/create-order', async (req, res) => {
+	try {
+		const email = req.body.email;
+		if (!email) {
+			throw "missing email"
+		}
+	
+		const itemId = req.body.item;
+		if (!itemId) {
+			throw "missing item"
+		}
 
-	request.prefer("return=representation");
-	request.requestBody({
-		intent: 'CAPTURE',
-		payer: {
-			// email_address,
-		},
-		purchase_units: [{
-			amount: {
-				currency_code: 'USD',
-				value: '220.00',
-				breakdown: {
-					item_total: {
-						currency_code: 'USD',
-						value: '220.00',
+		const dynamodb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
+
+		const row = await dynamodb.getItem({
+			TableName: 'registry.items',
+			Key: { 'Id': { 'S': itemId }, },
+			AttributesToGet: [ "Id", "Name", "Description", "Cost" ],
+		}).promise()
+
+		const item = row.Item
+		if (!item) {
+			throw "item does not exist"
+		}
+
+		// https://developer.paypal.com/docs/api/orders/v2/#orders_create
+		const request = new paypal.sdk.orders.OrdersCreateRequest();
+
+		request.prefer("return=representation");
+		request.requestBody({
+			intent: 'CAPTURE',
+			payer: {
+				email_address: email,
+			},
+			purchase_units: [{
+				amount: {
+					currency_code: 'USD',
+					value: item.Cost.N,
+					breakdown: {
+						item_total: {
+							currency_code: 'USD',
+							value: item.Cost.N,
+						},
 					},
 				},
-			},
-			description: "Luke & Rebecca's wedding registry",
-			soft_descriptor: "L&R Wedding",
-			items: [{
-				name: "Penny Sausage",
-				unit_amount: {
-					currency_code: 'USD',
-					value: '220.00',
-				},
-				quantity: '1',
-				description: "Buy Penny from Andrew",
-				category: "DIGITAL_GOODS",
-				sku: '1', // id
+				description: "Luke & Rebecca's wedding registry",
+				soft_descriptor: "L&R Wedding",
+				items: [{
+					name: item.Name.S,
+					unit_amount: {
+						currency_code: 'USD',
+						value: item.Cost.N,
+					},
+					quantity: '1',
+					description: item.Description.S,
+					category: "DIGITAL_GOODS",
+					sku: item.Id.S,
+				}],
 			}],
-		}],
-		application_context: {
-			brand_name: "Luke & Rebecca Wedding Registry",
-			shipping_preference: "NO_SHIPPING",
-			user_action: "PAY_NOW",
-		},
-	});
+			application_context: {
+				brand_name: "Luke & Rebecca Wedding Registry",
+				shipping_preference: "NO_SHIPPING",
+				user_action: "PAY_NOW",
+			},
+		});
 
-	paypal.client().execute(request).then((order) => {
+		const order = await paypal.client().execute(request)
+		const orderID = order.result.id
+
 		console.log(JSON.stringify(order, null, 2));
-		res.status(200).json({
-			orderID: order.result.id,
-		})
-	}).catch((err) => {
+		res.status(200).json({ orderID: orderID })
+	} catch (err) {
 		console.error(err)
-		res.status(500).json({})
-	})
+		res.status(500).json({ error: err })
+	}
 })
 
 app.post('/capture-order', (req, res) => {
-	const orderID = req.body.orderID;
+	try {
+		const orderID = req.body.orderID;
+		if (!orderID) {
+			throw "missing order"
+		}
 
-	// https://developer.paypal.com/docs/api/orders/v2/#orders_capture
-	const request = new paypal.sdk.orders.OrdersCaptureRequest(orderID);
-	request.prefer("return=representation");
-	request.requestBody({});
+		// TODO Verify item
+		const item = req.body.item
+		if (!item) {
+			throw "missing item"
+		}
 
-	paypal.client().execute(request).then((capture) => {
-		console.log(JSON.stringify(capture, null, 2));
-		//const captureID = capture.result.purchase_units[0].payments.captures[0].id;
-		res.status(200).json({})
-	}).catch((err) => {
+		const name = req.body.name;
+		if (!name) {
+			throw "missing name"
+		}
+
+		const email = req.body.email;
+		if (!email) { // TODO validate
+			throw "missing email"
+		}
+
+		const message = req.body.message;
+
+		const dynamodb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
+
+		const rowRequest = dynamodb.getItem({
+			TableName: 'registry.items',
+			Key: { 'Id': { 'S': item }, },
+		})
+
+		// https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+		const request = new paypal.sdk.orders.OrdersCaptureRequest(orderID);
+		request.prefer("return=representation");
+		request.requestBody({});
+
+		paypal.client().execute(request).then((capture) => {
+			console.log(JSON.stringify(capture, null, 2));
+			//const captureID = capture.result.purchase_units[0].payments.captures[0].id;
+			res.status(200).json({})
+		})
+	} catch(err) {
 		console.error(err)
-		res.status(500).json({})
-	})
+		res.status(500).json({ error: err })
+	}
 })
 
 const port = 8005
