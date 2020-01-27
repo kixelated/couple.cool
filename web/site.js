@@ -53,6 +53,7 @@ class BuyForm extends React.Component {
 			const paypal = create(PaypalButton, {
 				createOrder: (data, actions) => {
 					return actions.order.create({
+						intent: "CAPTURE",
 						payer: {
 							email_address: this.state.email,
 						},
@@ -91,26 +92,17 @@ class BuyForm extends React.Component {
 						this.setState({ error: err })
 					})
 				},
-				onApprove: (data, actions) => {
-					console.log("authorizing")
+				onApprove: async (data) => {
+					this.setState({ phase: "approving" })
 
-					return actions.order.authorize().then((authorization) => {
-						if (authorization.status != "COMPLETED") {
-							throw "unknown status: " + authorization.status
-						}
-
-						return authorization.purchase_units[0].payments.authorizations[0].id
-					}).then((authorizationID) => {
-						this.setState({ phase: "approving" })
-
-						return fetch('/purchase', {
+					try {
+						const res = await fetch('/purchase', {
 							method: 'post',
 							headers: {
 								'content-type': 'application/json',
 							},
 							body: JSON.stringify({
 								orderID: data.orderID,
-								authorizationID: authorizationID,
 								itemID: this.props.item.Id.S,
 
 								name: this.state.name,
@@ -118,22 +110,21 @@ class BuyForm extends React.Component {
 								message: this.state.message,
 							}),
 						})
-					}).then((resp) => {
-						return resp.json()
-					}).then((info) => {
+
+						const info = await res.json();
 						if (info.error) {
 							throw info.error
 						}
 
 						this.setState({ phase: "approved" })
-					}).catch((err) => {
+					} catch (err) {
 						console.error(err)
 						this.setState({ error: err })
-					})
+					}
 				},
 			})
 
-			const back = create("button", { onClick: this.goBack.bind(this) }, "Back") 
+			const back = create("button", { onClick: this.goBack.bind(this) }, "Back")
 
 			return create("div", {}, paypal, back)
 		}
@@ -249,20 +240,18 @@ class RegistryItem extends React.Component {
 	}
 
 	render() {
-		const img = create('img', { src: this.props.item.Image.S })
-		const name = create('div', { className: "name" }, this.props.item.Name.S)
-		const cost = create('div', { className: "cost" }, "$" + this.props.item.Cost.N)
-
-		//const description = create('div', { className: "description" }, this.props.item.Description.S)
-
-		const onClick = (e) => {
-			this.props.onSelected(this.props.item)
-			return false
+		const setSelected = (e) => {
+			this.props.setSelected(this.props.item)
+			e.preventDefault()
 		}
 
-		const link = create('a', { href: "#", onClick: onClick }, img, name, cost)
-
-		return create('div', { className: "item" }, link);
+		return create('div', { className: "item" },
+			create('a', { href: "#", onClick: setSelected },
+				create('img', { src: this.props.item.Image.S }),
+				create('div', { className: "name" }, this.props.item.Name.S),
+				create('div', { className: "cost" }, "$" + this.props.item.Cost.N),
+			),
+		)
 	}
 }
 
@@ -273,30 +262,30 @@ class Registry extends React.Component {
 		this.state = {
 			items: [],
 			selected: null,
-		};
+		}
 
 		fetch('/items').then((resp) => {
 			return resp.json()
 		}).then((items) => {
 			this.setState({ items: items })
-		});
+		})
 	}
 
 	render() {
-		const onSelected = (item) => {
+		const setSelected = (item) => {
 			this.setState({ selected: item })
 		}
 
 		const overlay = create(FullItem, {
 			item: this.state.selected,
-			onDeselect: onSelected,
+			onDeselect: setSelected,
 		})
 
 		const items = this.state.items.map((item) => {
 			return create(RegistryItem, {
 				item: item,
 				key: item.Id.S,
-				onSelected: onSelected,
+				setSelected: setSelected,
 			})
 		});
 
