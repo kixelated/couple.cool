@@ -20,11 +20,15 @@ app.get('/items', async (req, res) => {
 			AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'BuyerName' ],
 		}).promise()
 
-		res.status(200).json(data.Items);
+		for (const item of data.Items) {
+			item.BuyerName = "Anonymous"
+		}
+
+		res.status(200).json(data.Items)
 	} catch (err) {
 		console.error(err)
 		res.status(500).json({ error: err })
-	});
+	}
 })
 
 app.post('/purchase', async (req, res) => {

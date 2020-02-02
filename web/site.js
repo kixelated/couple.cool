@@ -15,27 +15,6 @@ class BuyForm extends React.Component {
 		}
 	}
 
-	setName(e) {
-		this.setState({ name: e.target.value })
-	}
-
-	setEmail(e) {
-		this.setState({ email: e.target.value })
-	}
-
-	setMessage(e) {
-		this.setState({ message: e.target.value })
-	}
-
-	goNext(e) {
-		e.preventDefault()
-		this.setState({ phase: "paypal" })
-	}
-
-	goBack(e) {
-		this.setState({ phase: "form" })
-	}
-
 	render() {
 		if (this.state.error) {
 			return create("p", {}, "Error: " + this.state.error)
@@ -47,6 +26,10 @@ class BuyForm extends React.Component {
 
 		if (this.state.phase == "approved" ) {
 			return create("p", {}, "THANKS!")
+		}
+
+		if (this.props.item.BuyerName) {
+			return null
 		}
 
 		if (this.state.phase == "paypal")  {
@@ -117,6 +100,7 @@ class BuyForm extends React.Component {
 						}
 
 						this.setState({ phase: "approved" })
+						this.props.item.BuyerName = { S: "Anonymous" }
 					} catch (err) {
 						console.error(err)
 						this.setState({ error: err })
@@ -124,76 +108,46 @@ class BuyForm extends React.Component {
 				},
 			})
 
-			const back = create("button", { onClick: this.goBack.bind(this) }, "Back")
+			const goBack = (e) => {
+				this.setState({ phase: "form" })
+			}
 
-			return create("div", {}, paypal, back)
+			const back = create("button", { type: "button", onClick: goBack }, "Back")
+
+			return create("div", { className: "pay" }, paypal, back)
 		}
 
-		const name = create(BuyFormName, {
-			value: this.state.name,
-			onChange: this.setName.bind(this),
-		})
+		const goNext = (e) => {
+			e.preventDefault()
+			this.setState({ phase: "paypal" })
+		}
 
-		const email = create(BuyFormEmail, {
-			value: this.state.email,
-			onChange: this.setEmail.bind(this),
-		})
-
-		const message = create(BuyFormMessage, {
-			value: this.state.message,
-			onChange: this.setMessage.bind(this),
-		})
-
-		const next = create("input", { type: "submit", value: "Next" })
-
-		return create('form', { onSubmit: this.goNext.bind(this) }, name, email, message, next);
-	}
-}
-
-class BuyFormName extends React.Component {
-	render() {
-		const text = create('span', {}, "Name:")
-
-		const input = create('input', {
-			type: 'text',
-			value: this.props.value,
-			onChange: this.props.onChange,
-			required: true,
-			spellCheck: false,
-		})
-
-		return create('div', { className: "name" }, text, input);
-	}
-}
-
-class BuyFormEmail extends React.Component {
-	render() {
-		const text = create('span', {}, "Email:")
-
-		const input = create('input', {
-			type: 'email',
-			value: this.props.value,
-			onChange: this.props.onChange,
-			required: true,
-		})
-
-		return create('div', { className: "email" }, text, input);
-	}
-}
-
-class BuyFormMessage extends React.Component {
-	render() {
-		const text = create('span', {}, "Message:")
-
-		const input = create('textarea', {
-			value: this.props.value,
-			onChange: this.props.onChange,
-			placeholder: 'Leave a message for the "happy" couple!',
-			spellCheck: true,
-			required: true,
-		})
-
-		return create('div', { className: "message" }, text, input);
+		return create('form', { onSubmit: goNext, className: "form" },
+			create('label', {}, "Name:"),
+			create('input', {
+				type: 'text',
+				value: this.state.name,
+				onChange: (e) => { this.setState({ name: e.target.value }) },
+				required: true,
+				spellCheck: false,
+			}),
+			create('label', {}, "Email:"),
+			create('input', {
+				type: 'email',
+				value: this.state.email,
+				onChange: (e) => { this.setState({ email: e.target.value }) },
+				required: true,
+			}),
+			create('label', {}, "Message:"),
+			create('textarea', {
+				value: this.state.message,
+				onChange: (e) => { this.setState({ message: e.target.value }) },
+				placeholder: 'Leave a message for the "happy" couple!',
+				spellCheck: true,
+				required: true,
+			}),
+			create("input", { type: "submit", value: "Next" }),
+		)
 	}
 }
 
@@ -207,25 +161,28 @@ class FullItem extends React.Component {
 			return null
 		}
 
-		const img = create('img', { src: this.props.item.Image.S })
-
-		const name = create('div', { className: "name" }, this.props.item.Name.S)
-		const cost = create('div', { className: "cost" }, "$" + this.props.item.Cost.N)
-		const description = create('p', { className: "description" }, this.props.item.Description.S)
-
-		const info = create('div', { className: "info" }, name, cost, description)
 
 		const onClick = (e) => {
 			this.props.onDeselect()
 			e.preventDefault()
 		}
 
-		const form = create(BuyForm, { item: this.props.item })
+		const header = create('div', { className: "header" }, 
+			create('img', { src: this.props.item.Image.S }),
+			create('div', { className: "info" }, 
+				create('div', { className: "name" }, this.props.item.Name.S),
+				create('div', { className: "cost" }, "$" + this.props.item.Cost.N),
+				create('p', { className: "description" }, this.props.item.Description.S),
+			),
+		)
 
-		const header = create('div', { className: "header" }, img, info)
-		const body = create('div', { className: "body" }, form)
+		const border = create('div', { className: "border" })
 
-		const container = create('div', { className: "fullItem" }, header, body)
+		const body = create('div', { className: "body" }, 
+			create(BuyForm, { item: this.props.item }),
+		)
+
+		const container = create('div', { className: "fullItem" }, header, border, body)
 		const deselect = create('a', { className: "deselect", href: "#back", onClick: onClick })
 
 		const overlay = create('div', { className: "overlay" }, deselect, container, deselect)
@@ -234,9 +191,19 @@ class FullItem extends React.Component {
 	}
 }
 
+class RegistryItemPrice extends React.Component {
+	render() {
+		if (!this.props.item.BuyerName) {
+			return create('div', { className: "cost"}, "$" + this.props.item.Cost.N)
+		}
+
+		return create('div', { className: "buyer" }, "SOLD!")
+	}
+}
+
 class RegistryItem extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 	}
 
 	render() {
@@ -245,11 +212,13 @@ class RegistryItem extends React.Component {
 			e.preventDefault()
 		}
 
-		return create('div', { className: "item" },
+		const sold = (this.props.item.BuyerName !== undefined) ? "sold" : ""
+
+		return create('div', { className: "item", "data-sold": sold },
 			create('a', { href: "#", onClick: setSelected },
 				create('img', { src: this.props.item.Image.S }),
 				create('div', { className: "name" }, this.props.item.Name.S),
-				create('div', { className: "cost" }, "$" + this.props.item.Cost.N),
+				create(RegistryItemPrice, { item: this.props.item })
 			),
 		)
 	}
