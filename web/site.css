@@ -57,7 +57,7 @@
 	align-items: flex-end;
 
 	width: 16rem;
-	padding: 1rem;
+	padding: 0.5rem;
 }
 
 .item a {
@@ -114,12 +114,11 @@
 	color: #b50000;
 }
 
-.pay {
+.pay .pal {
 	text-align: center;
 }
 
 .pay button {
-	text-align: left;
 	width: 6rem;
 	height: 2rem;
 }

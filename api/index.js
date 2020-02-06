@@ -17,7 +17,7 @@ app.get('/items', async (req, res) => {
 	try {
 		const data = await dynamodb.scan({
 			TableName: 'registry.items',
-			AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'BuyerName' ],
+			AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'CostDisplay', 'BuyerName' ],
 		}).promise()
 
 		for (const item of data.Items) {

@@ -29,11 +29,12 @@ class BuyForm extends React.Component {
 		}
 
 		if (this.props.item.BuyerName) {
-			return null
+			return create('div', { className: "buyer" }, "Already purchased; go find something else!")
 		}
 
 		if (this.state.phase == "paypal")  {
 			const paypal = create(PaypalButton, {
+				className: "pal",
 				createOrder: (data, actions) => {
 					return actions.order.create({
 						intent: "CAPTURE",
@@ -171,7 +172,7 @@ class FullItem extends React.Component {
 			create('img', { src: this.props.item.Image.S }),
 			create('div', { className: "info" }, 
 				create('div', { className: "name" }, this.props.item.Name.S),
-				create('div', { className: "cost" }, "$" + this.props.item.Cost.N),
+				create('div', { className: "cost" }, this.props.item.CostDisplay.S),
 				create('p', { className: "description" }, this.props.item.Description.S),
 			),
 		)
@@ -194,7 +195,7 @@ class FullItem extends React.Component {
 class RegistryItemPrice extends React.Component {
 	render() {
 		if (!this.props.item.BuyerName) {
-			return create('div', { className: "cost"}, "$" + this.props.item.Cost.N)
+			return create('div', { className: "cost"}, this.props.item.CostDisplay.S)
 		}
 
 		return create('div', { className: "buyer" }, "TAKEN!")
