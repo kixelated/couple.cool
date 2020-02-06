@@ -215,7 +215,7 @@ class RegistryItem extends React.Component {
 
 		return create('div', { className: "item" },
 			create('a', { href: "#", onClick: setSelected },
-				create('img', { src: this.props.item.Image.S }),
+				create('img', { src: "images/" + this.props.item.Image.S }),
 				create('div', { className: "name" }, this.props.item.Name.S),
 				create(RegistryItemPrice, { item: this.props.item })
 			),

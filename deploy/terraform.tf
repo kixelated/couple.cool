@@ -16,13 +16,3 @@ resource "aws_dynamodb_table" "items" {
 	    type = "S"
 	}
 }
-
-resource "aws_s3_bucket" "web" {
-	bucket = "luke-rebe-wedding-registry"
-	acl    = "public-read"
-
-	tags = {
-		Name        = "My bucket"
-		Environment = "Dev"
-	}
-}
