@@ -197,7 +197,7 @@ class RegistryItemPrice extends React.Component {
 			return create('div', { className: "cost"}, "$" + this.props.item.Cost.N)
 		}
 
-		return create('div', { className: "buyer" }, "SOLD!")
+		return create('div', { className: "buyer" }, "TAKEN!")
 	}
 }
 
@@ -212,9 +212,7 @@ class RegistryItem extends React.Component {
 			e.preventDefault()
 		}
 
-		const sold = (this.props.item.BuyerName !== undefined) ? "sold" : ""
-
-		return create('div', { className: "item", "data-sold": sold },
+		return create('div', { className: "item" },
 			create('a', { href: "#", onClick: setSelected },
 				create('img', { src: this.props.item.Image.S }),
 				create('div', { className: "name" }, this.props.item.Name.S),
@@ -256,7 +254,7 @@ class Registry extends React.Component {
 				key: item.Id.S,
 				setSelected: setSelected,
 			})
-		});
+		})
 
 		const itemsContainer = create('div', { className: "items" }, items)
 

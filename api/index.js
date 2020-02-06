@@ -21,7 +21,9 @@ app.get('/items', async (req, res) => {
 		}).promise()
 
 		for (const item of data.Items) {
-			item.BuyerName = "Anonymous"
+			if (item.BuyerName) {
+				item.BuyerName = { S: "Anonymous" }
+			}
 		}
 
 		res.status(200).json(data.Items)
