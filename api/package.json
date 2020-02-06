@@ -2,9 +2,13 @@
   "name": "wedding",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "main": "app.js",
+  "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.2",
+    "aws-sdk": "^2.612.0",
+    "aws-serverless-express": "^3.3.6",
+    "express": "^4.17.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

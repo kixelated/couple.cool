@@ -196,7 +196,11 @@ app.post('/purchase', async (req, res) => {
 	}
 })
 
+module.exports = app
+
+/*
 const port = 8005
 app.listen(port, () => {
 	console.log(`listening on port ${port}`)
 })
+*/
