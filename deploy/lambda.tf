@@ -31,6 +31,15 @@ data "aws_iam_policy_document" "wedding_policy" {
 		actions = [ "dynamodb:*" ]
 		resources = [ aws_dynamodb_table.items.arn ]
 	}
+
+	statement {
+		actions = [ "logs:*" ]
+		resources = [ aws_cloudwatch_log_group.wedding.arn ]
+	}
+}
+
+resource "aws_cloudwatch_log_group" "wedding" {
+	name = "/aws/lambda/wedding"
 }
 
 resource "aws_lambda_function" "wedding" {
