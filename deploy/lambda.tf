@@ -4,29 +4,39 @@ data "archive_file" "wedding" {
 	output_path = "${path.module}/api.zip"
 }
 
-resource "aws_iam_role" "lambda_role" {
-	name = "lambda_role"
-	assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
+resource "aws_iam_role" "wedding" {
+	name = "wedding_role"
+	assume_role_policy = data.aws_iam_policy_document.wedding_assume.json
 }
-EOF
+
+resource "aws_iam_role_policy" "wedding" {
+	name = "wedding_policy"
+	role = aws_iam_role.wedding.id
+	policy = data.aws_iam_policy_document.wedding_policy.json
+}
+
+data "aws_iam_policy_document" "wedding_assume" {
+	statement {
+		actions = [ "sts:AssumeRole" ]
+
+		principals {
+			type = "Service"
+			identifiers = [ "lambda.amazonaws.com" ]
+		}
+	}
+}
+
+data "aws_iam_policy_document" "wedding_policy" {
+	statement {
+		actions = [ "dynamodb:*" ]
+		resources = [ aws_dynamodb_table.items.arn ]
+	}
 }
 
 resource "aws_lambda_function" "wedding" {
 	filename         = data.archive_file.wedding.output_path
 	function_name    = "wedding"
-	role             = aws_iam_role.lambda_role.arn
+	role             = aws_iam_role.wedding.arn
 	handler          = "lambda.handler"
 	source_code_hash = data.archive_file.wedding.output_base64sha256
 	runtime          = "nodejs12.x"

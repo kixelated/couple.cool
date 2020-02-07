@@ -1,3 +1,17 @@
+resource "aws_dynamodb_table" "items" {
+	name           = "registry.items"
+	billing_mode   = "PROVISIONED"
+	write_capacity = 1
+	read_capacity  = 5
+
+	hash_key = "Id"
+
+	attribute {
+	    name = "Id"
+	    type = "S"
+	}
+}
+
 resource "aws_dynamodb_table_item" "items" {
 	table_name = aws_dynamodb_table.items.name
   	hash_key   = aws_dynamodb_table.items.hash_key

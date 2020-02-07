@@ -4,9 +4,6 @@ const express = require('express')
 const path = require('path')
 const aws = require('aws-sdk')
 
-aws.config.credentials = new aws.SharedIniFileCredentials({ profile: 'registry' });
-aws.config.update({ region: 'us-west-2' })
-
 const app = express()
 const dynamodb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
 
@@ -197,10 +194,3 @@ app.post('/purchase', async (req, res) => {
 })
 
 module.exports = app
-
-/*
-const port = 8005
-app.listen(port, () => {
-	console.log(`listening on port ${port}`)
-})
-*/
