@@ -36,6 +36,15 @@ data "aws_iam_policy_document" "wedding_policy" {
 		actions = [ "logs:*" ]
 		resources = [ aws_cloudwatch_log_group.wedding.arn ]
 	}
+
+	statement {
+		actions = [ "secretsmanager:GetSecretValue" ]
+		resources = [ data.aws_secretsmanager_secret.wedding_paypal.arn ]
+	}
+}
+
+data "aws_secretsmanager_secret" "wedding_paypal" {
+	name = "wedding_paypal"
 }
 
 resource "aws_cloudwatch_log_group" "wedding" {

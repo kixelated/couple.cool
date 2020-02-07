@@ -1,9 +1,7 @@
 const aws = require('aws-sdk')
-const app = require('./app')
-
-aws.config.credentials = new aws.SharedIniFileCredentials({ profile: 'registry' });
+aws.config.credentials = new aws.SharedIniFileCredentials({ profile: 'wedding' });
 aws.config.update({ region: 'us-west-2' })
 
-const port = 8005
-app.listen(port)
-console.log(`listening on port ${port}`)
+const app = require('./app')
+app.listen(8005)
+console.log(`listening on port 8005`)

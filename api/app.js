@@ -1,17 +1,22 @@
-const paypal = require('./paypal')
-
 const express = require('express')
 const path = require('path')
 const aws = require('aws-sdk')
+const paypal = require('@paypal/checkout-server-sdk')
 
 const app = express()
-const dynamodb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
+const dynamodb = new aws.DynamoDB({ apiVersion: '2012-08-10' })
+const secrets = new aws.SecretsManager({ apiVersion: '2017-10-17' })
 
 app.use(express.static(path.join(__dirname, '../web')))
 app.use(express.json())
 
 app.get('/items', async (req, res) => {
 	try {
+		const paypalSecrets = await secrets.getSecretValue({ SecretId: "wedding_paypal" }).promise()
+		const paypalCreds = JSON.parse(paypalSecrets.SecretString)
+		const paypalEnv = new paypal.core.SandboxEnvironment(paypalCreds.id, paypalCreds.secret)
+		const paypalClient = new paypal.core.PayPalHttpClient(paypalEnv)
+
 		const data = await dynamodb.scan({
 			TableName: 'registry.items',
 			AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'CostDisplay', 'BuyerName' ],
@@ -32,6 +37,9 @@ app.get('/items', async (req, res) => {
 
 app.post('/purchase', async (req, res) => {
 	try {
+		// Start fetching the paypal credentials
+		const paypalPromise = await secrets.getSecretValue({ SecretId: "wedding_paypal" }).promise()
+
 		const name = req.body.name;
 		if (!name) {
 			throw "missing name"
@@ -58,15 +66,20 @@ app.post('/purchase', async (req, res) => {
 		}
 
 		// Get the item information
-		const itemPromise = await dynamodb.getItem({
+		const itemPromise = dynamodb.getItem({
 			TableName: 'registry.items',
 			Key: { 'Id': { 'S': itemID }, },
 			AttributesToGet: [ "Id", "Cost", "BuyerOrder", "BuyerCapture" ],
 		}).promise()
 
+		// Set up the paypal client
+		const paypalCreds = JSON.parse((await paypalPromise).SecretString)
+		const paypalEnv = new paypal.core.SandboxEnvironment(paypalCreds.id, paypalCreds.secret)
+		const paypalClient = new paypal.core.PayPalHttpClient(paypalEnv)
+
 		// Get the order information
-		const orderRequest = new paypal.sdk.orders.OrdersGetRequest(orderID)
-		const orderPromise = paypal.client().execute(orderRequest)
+		const orderRequest = new paypal.orders.OrdersGetRequest(orderID)
+		const orderPromise = paypalClient.execute(orderRequest)
 
 		// Validate the item
 		const item = (await itemPromise).Item
@@ -120,11 +133,11 @@ app.post('/purchase', async (req, res) => {
 
 		try {
 			// Capture the order so we get PAID
-			const captureRequest = new paypal.sdk.orders.OrdersCaptureRequest(orderID)
+			const captureRequest = new paypal.orders.OrdersCaptureRequest(orderID)
 			captureRequest.prefer("return=minimal");
 			captureRequest.requestBody({});
 
-			const capture = await paypal.client().execute(captureRequest)
+			const capture = await paypalClient.execute(captureRequest)
 			console.log("capture:", JSON.stringify(capture, null, 2));
 
 			if (capture.result.status != "COMPLETED") {
@@ -158,13 +171,13 @@ app.post('/purchase', async (req, res) => {
 
 				res.status(200).json({})
 			} catch (err) {
-				const refundRequest = new paypal.sdk.payments.CapturesRefundRequest(captureID)
+				const refundRequest = new paypal.payments.CapturesRefundRequest(captureID)
 				refundRequest.prefer("return=minimal");
 				refundRequest.requestBody({
 					note_to_payer: "Something went wrong at the very end and this is embarassing but at least i am a capable programmer",
 				});
 
-				const refund = await paypal.client().execute(refundRequest)
+				const refund = await paypalClient.execute(refundRequest)
 				console.log("refund:", JSON.stringify(refund, null, 2));
 
 				throw err

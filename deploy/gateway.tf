@@ -30,7 +30,7 @@ resource "aws_api_gateway_deployment" "wedding" {
 	depends_on = [ aws_api_gateway_integration.lambda ]
 
 	rest_api_id = aws_api_gateway_rest_api.wedding.id
-	stage_name  = "test"
+	stage_name  = "api"
 }
 
 output "base_url" {
