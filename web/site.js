@@ -80,7 +80,7 @@ class BuyForm extends React.Component {
 					this.setState({ phase: "approving" })
 
 					try {
-						const res = await fetch('/purchase', {
+						const res = await fetch('/api/purchase', {
 							method: 'post',
 							headers: {
 								'content-type': 'application/json',
@@ -169,7 +169,7 @@ class FullItem extends React.Component {
 		}
 
 		const header = create('div', { className: "header" }, 
-			create('img', { src: this.props.item.Image.S }),
+			create('img', { src: "images/" + this.props.item.Image.S }),
 			create('div', { className: "info" }, 
 				create('div', { className: "name" }, this.props.item.Name.S),
 				create('div', { className: "cost" }, this.props.item.CostDisplay.S),
@@ -232,7 +232,7 @@ class Registry extends React.Component {
 			selected: null,
 		}
 
-		fetch('/items').then((resp) => {
+		fetch('/api/items').then((resp) => {
 			return resp.json()
 		}).then((items) => {
 			this.setState({ items: items })

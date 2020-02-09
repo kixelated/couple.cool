@@ -4,6 +4,7 @@ locals {
 		css = "text/css; charset=utf-8"
 		js = "application/javascript"
 		png = "image/png"
+		jpg = "image/jpeg"
 	}
 }
 

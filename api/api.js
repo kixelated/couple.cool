@@ -7,7 +7,6 @@ const app = express()
 const dynamodb = new aws.DynamoDB({ apiVersion: '2012-08-10' })
 const secrets = new aws.SecretsManager({ apiVersion: '2017-10-17' })
 
-app.use(express.static(path.join(__dirname, '../web')))
 app.use(express.json())
 
 app.get('/items', async (req, res) => {

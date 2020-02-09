@@ -66,5 +66,5 @@ resource "aws_lambda_permission" "apigw" {
 	function_name = aws_lambda_function.wedding.function_name
 	principal     = "apigateway.amazonaws.com"
 
-	source_arn = "${aws_api_gateway_rest_api.wedding.execution_arn}/*/*"
+	source_arn = "${aws_api_gateway_rest_api.wedding_api.execution_arn}/*/*"
 }
