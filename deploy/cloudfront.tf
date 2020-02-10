@@ -37,6 +37,8 @@ resource "aws_cloudfront_distribution" "wedding" {
 			}
 		}
 
+		default_ttl = 60
+
 		viewer_protocol_policy = "redirect-to-https"
 	}
 
@@ -47,9 +49,9 @@ resource "aws_cloudfront_distribution" "wedding" {
 		allowed_methods  = [ "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT" ]
 		cached_methods   = [ "GET", "HEAD" ]
 
-		default_ttl = 0
+		default_ttl = 10
 		min_ttl     = 0
-		max_ttl     = 0
+		max_ttl     = 60
 		
 		forwarded_values {
 			query_string = true
