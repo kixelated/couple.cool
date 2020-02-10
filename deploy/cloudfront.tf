@@ -71,15 +71,14 @@ resource "aws_cloudfront_distribution" "wedding" {
 
 	viewer_certificate {
 		acm_certificate_arn = aws_acm_certificate.cert.arn
-		cloudfront_default_certificate = true
-		ssl_support_method = "sni-only"
+		ssl_support_method  = "sni-only"
 	}
 }
 
 resource "aws_route53_record" "root_domain" {
 	zone_id = data.aws_route53_zone.wedding.zone_id
-	name = data.aws_route53_zone.wedding.name
-	type = "A"
+	name    = data.aws_route53_zone.wedding.name
+	type    = "A"
 
 	alias {
 		name = aws_cloudfront_distribution.wedding.domain_name
