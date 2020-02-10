@@ -2,10 +2,6 @@ resource "aws_cloudfront_distribution" "wedding" {
 	origin {
 		origin_id   = "s3"
 		domain_name = aws_s3_bucket.wedding.bucket_regional_domain_name
-
-		s3_origin_config {
-			origin_access_identity = aws_cloudfront_origin_access_identity.wedding.cloudfront_access_identity_path
-		}
 	}
 
 	origin {
@@ -91,25 +87,3 @@ resource "aws_route53_record" "root_domain" {
 		evaluate_target_health = false
 	}
 }
-
-resource "aws_cloudfront_origin_access_identity" "wedding" {
-	comment = "wedding"
-}
-
-resource "aws_s3_bucket_policy" "wedding" {
-	bucket = aws_s3_bucket.wedding.id
-	policy = data.aws_iam_policy_document.wedding_cloudfront.json
-}
-
-data "aws_iam_policy_document" "wedding_cloudfront" {
-	statement {
-		actions   = [ "s3:GetObject", "s3:ListBucket" ]
-		resources = [ aws_s3_bucket.wedding.arn ]
-
-		principals {
-			type        = "AWS"
-			identifiers = [ aws_cloudfront_origin_access_identity.wedding.iam_arn ]
-		}
-	}
-}
-

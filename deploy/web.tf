@@ -10,10 +10,12 @@ locals {
 
 resource "aws_s3_bucket" "wedding" {
 	bucket = "couple.cool"
+	acl    = "public-read"
 }
 
 resource "aws_s3_bucket_object" "wedding" {
 	bucket  = aws_s3_bucket.wedding.bucket
+	acl    = "public-read"
 
 	for_each = fileset("${path.module}/../web", "**/*")
 
