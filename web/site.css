@@ -1,3 +1,35 @@
+:root {
+	--primary: #5e3455;
+	--accent: #460f8f;
+	--white: #fafafa;
+	--black: #0f0f0f;
+	--grey: #eaeaea;
+}
+
+body {
+	background-color: var(--grey);
+}
+
+.wrapper {
+	width: min(65rem, 100vw);
+	margin: 0 auto;
+}
+
+.banner {
+	background-color: var(--primary);
+}
+
+.banner a {
+	display: inline-block;
+	color: var(--white);
+	padding: 1rem 2rem;
+}
+
+.content {
+	background-color: var(--white);
+	box-shadow: 0 0 10rem rgba(94, 52, 85, 0.2);
+}
+
 .overlay {
 	display: flex;
 	justify-content: center;

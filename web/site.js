@@ -2,7 +2,6 @@ const create = React.createElement;
 
 const PaypalButton = paypal.Buttons.driver("react", { React, ReactDOM })
 
-
 class BuyForm extends React.Component {
 	constructor(props) {
 		super(props);
@@ -264,6 +263,6 @@ class Registry extends React.Component {
 }
 
 const registry = create(Registry)
-const container = document.getElementById('app')
+const container = document.getElementById('registry')
 
 ReactDOM.render(registry, container)
