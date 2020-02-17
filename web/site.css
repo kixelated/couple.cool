@@ -264,7 +264,6 @@ body {
 .registry .form {
 	display: grid;
 	grid-template-columns: 6rem 1fr 6rem;
-	grid-template-rows: 2rem 2rem 1fr 2rem;
 	grid-gap: 1rem;
 	padding: 1rem;
 	align-items: start;
@@ -283,8 +282,6 @@ body {
 
 .registry .form textarea {
 	grid-column: 2 / 4;
-	height: 100%;
-	width: 100%;
 }
 
 .registry .form button {
@@ -293,4 +290,8 @@ body {
 
 .registry .form input[type="submit"] {
 	grid-column: 3 / 4;
+}
+
+.error {
+	color: rgb(var(--red));
 }

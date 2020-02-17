@@ -39,22 +39,22 @@ app.post('/purchase', async (req, res) => {
 		// Start fetching the paypal credentials
 		const paypalPromise = await secrets.getSecretValue({ SecretId: "wedding_paypal" }).promise()
 
-		const name = req.body.name;
+		const name = req.body.name
 		if (!name) {
 			throw "missing name"
 		}
 
-		const email = req.body.email;
+		const email = req.body.email
 		if (!email) { // TODO validate
 			throw "missing email"
 		}
 
-		const message = req.body.message;
+		const message = req.body.message
 		if (!message) {
 			throw "missing message"
 		}
 
-		const orderID = req.body.orderID;
+		const orderID = req.body.orderID
 		if (!orderID) {
 			throw "missing order id"
 		}
@@ -62,6 +62,11 @@ app.post('/purchase', async (req, res) => {
 		const itemID = req.body.itemID
 		if (!itemID) {
 			throw "missing item ID"
+		}
+
+		const cost = parseInt(req.body.cost)
+		if (!cost || isNaN(cost) || cost < 1) {
+			throw "missing cost"
 		}
 
 		// Get the item information
@@ -82,15 +87,19 @@ app.post('/purchase', async (req, res) => {
 
 		// Validate the item
 		const item = (await itemPromise).Item
-		console.log("item:", JSON.stringify(item, null, 2))
-
 		if (!item) {
 			throw "no such item: " + itemID
 		}
 
+		console.log("item:", JSON.stringify(item, null, 2))
+
 		// See if the item was purchased already
 		if (item.BuyerOrder || item.BuyerCapture) {
 			throw "just purchased; find something else!"
+		}
+
+		if (item.Cost.N && parseInt(item.Cost.N) != cost) {
+			throw "paid doesn't match item cost: " + cost + " != " + item.Cost.N
 		}
 
 		// Validate the order
@@ -110,8 +119,12 @@ app.post('/purchase', async (req, res) => {
 			throw "wrong order currency: " + amount.currency_code
 		}
 
-		if (parseInt(amount.value) != parseInt(item.Cost.N)) {
-			throw "wrong order amount: " + parseInt(amount.value) + " != " + item.Cost.N
+		if (cost != parseInt(amount.value)) {
+			throw "cost doesn't match paid: " + cost + " != " + amount.value
+		}
+
+		if (item.Cost.N && parseInt(amount.value) != parseInt(item.Cost.N)) {
+			throw "wrong order amount: " + amount.value + " != " + item.Cost.N
 		}
 
 		// Update the registry table with our intent to capture.

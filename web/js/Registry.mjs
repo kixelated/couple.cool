@@ -49,6 +49,7 @@ class RegistryBuyForm extends React.Component {
 		super(props);
 
 		this.state = {
+			cost: this.props.item.Cost.N,
 			name: "",
 			email: "",
 			message: "",
@@ -58,7 +59,14 @@ class RegistryBuyForm extends React.Component {
 
 	render() {
 		if (this.state.error) {
-			return create("p", {}, "Error: " + this.state.error)
+			const goBack = (e) => {
+				this.setState({ error: "" })
+			}
+
+			return create("div", {},
+				create("p", { className: "error" }, this.state.error),
+				create("button", { type: "button", onClick: goBack }, "Back"),
+			)
 		}
 
 		if (this.state.phase == "approving" ) {
@@ -85,11 +93,11 @@ class RegistryBuyForm extends React.Component {
 						purchase_units: [{
 							amount: {
 								currency_code: 'USD',
-								value: this.props.item.Cost.N,
+								value: this.state.cost,
 								breakdown: {
 									item_total: {
 										currency_code: 'USD',
-										value: this.props.item.Cost.N,
+										value: this.state.cost,
 									},
 								},
 							},
@@ -100,7 +108,7 @@ class RegistryBuyForm extends React.Component {
 								name: this.props.item.Name.S,
 								unit_amount: {
 									currency_code: 'USD',
-									value: this.props.item.Cost.N,
+									value: this.state.cost,
 								},
 								quantity: '1',
 								description: this.props.item.Description.S,
@@ -133,6 +141,7 @@ class RegistryBuyForm extends React.Component {
 								name: this.state.name,
 								email: this.state.email,
 								message: this.state.message,
+								cost: this.state.cost,
 							}),
 						})
 
@@ -164,8 +173,13 @@ class RegistryBuyForm extends React.Component {
 		}
 
 		const goNext = (e) => {
-			this.setState({ phase: "paypal" })
 			e.preventDefault()
+
+			if (this.state.cost >= 1) {
+				this.setState({ phase: "paypal" })
+			} else {
+				this.setState({ error: "Enter an amount greater than $1" })
+			}
 		}
 
 		const goBack = (e) => {
@@ -173,9 +187,30 @@ class RegistryBuyForm extends React.Component {
 			e.preventDefault()
 		}
 
+		const onCost = (e) => {
+			let cost = e.target.value
+			if (cost.startsWith("$")) {
+				cost = cost.substr(1)
+			}
+
+			cost = parseInt(cost)
+			if (isNaN(cost)) {
+				cost = 0
+			}
+
+			this.setState({ cost: cost })
+		}
+
 		return create("div", {},
 			create("p", {}, "Enter your details if you want to buy this item for us. We'll send you a personalized picture when the deed is done."),
 			create('form', { onSubmit: goNext, className: "form" },
+				create('label', {}, "Amount:"),
+				create('input', {
+					type: 'text',
+					value: "$" + this.state.cost,
+					onChange: onCost,
+					disabled: this.props.item.Cost.N > 0,
+				}),
 				create('label', {}, "Name:"),
 				create('input', {
 					type: 'text',
