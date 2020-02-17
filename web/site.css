@@ -33,7 +33,7 @@ body {
 	padding: 1rem 2rem;
 }
 
-.content {
+#content {
 	background-color: var(--white);
 	box-shadow: 0 0 10rem rgba(94, 52, 85, 0.2);
 
@@ -157,18 +157,16 @@ body {
 	background: rgba(0, 0, 0, 0.1);
 }
 
-.registry .items {
+.registry .polaroids {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 }
 
-.registry .items .item {
-	display: flex;
-	align-items: flex-end;
-
+.registry .polaroids .polaroid {
 	width: 16rem;
 	padding: 1rem;
+	margin: 1rem;
 }
 
 .couple .polaroid {
@@ -189,11 +187,14 @@ body {
 	box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
 	padding: 1rem;
 
+	font-family: 'Gloria Hallelujah', cursive;
+	font-size: 1.5rem;
 	text-decoration: none;
 	color: #333333;
 
 	transform: rotate(-2deg);
 	transition: transform 0.15s linear, box-shadow 0.15s linear;
+
 }
 
 .polaroids .polaroid:nth-child(even) {
@@ -227,6 +228,11 @@ body {
 .polaroid img {
 	object-fit: cover;
 	width: 100%;
+}
+
+.polaroid p {
+	margin-top: 1rem;
+	text-align: center;
 }
 
 .polaroid .name {

@@ -25,15 +25,26 @@
 </head>
 
 <body>
-	<div id="site"></div>
+	<div class="banner">
+		<div class="wrapper">
+			<a href="#home">😎</a>
+			<a href="#photos">Photos</a>
+			<a href="#registry">Registry</a>
+			<a href="https://github.com/kixelated/couple.cool">Source</a>
+		</div>
+	</div>
+	<div class="wrapper">
+		<div id="content">
+		</div>
+	</div>
 
 	<script type="module">
-		import { Site } from "./js/Site.mjs"
+		import { Content } from "./js/Content.mjs"
 
-		const container = document.getElementById('site')
-		const site = React.createElement(Site, { page: window.location.hash || "home" })
+		const container = document.getElementById('content')
+		const content = React.createElement(Content, { page: window.location.hash || "home" })
 
-		ReactDOM.render(site, container)
+		ReactDOM.render(content, container)
 	</script>
 </body>
 

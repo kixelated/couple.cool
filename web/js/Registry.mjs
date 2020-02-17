@@ -254,12 +254,10 @@ class RegistryItem extends React.Component {
 			e.preventDefault()
 		}
 
-		return create('div', { className: "item" },
-			create('a', { className: "polaroid", href: "#", onClick: setSelected },
-				create('img', { src: "images/" + this.props.item.Image.S }),
-				create('div', { className: "name" }, this.props.item.Name.S),
-				create(RegistryItemPrice, { item: this.props.item })
-			),
+		return create('a', { className: "polaroid", href: "#", onClick: setSelected },
+			create('img', { src: "images/" + this.props.item.Image.S }),
+			create('div', { className: "name" }, this.props.item.Name.S),
+			create(RegistryItemPrice, { item: this.props.item })
 		)
 	}
 }
