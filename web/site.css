@@ -171,6 +171,17 @@ body {
 	padding: 1rem;
 }
 
+.couple .polaroid {
+	width: 20rem;
+	margin: 2rem;
+}
+
+.polaroids {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
 .polaroid {
 	display: inline-block;
 
@@ -185,23 +196,23 @@ body {
 	transition: transform 0.15s linear, box-shadow 0.15s linear;
 }
 
-.registry .items .item:nth-child(even) .polaroid {
+.polaroids .polaroid:nth-child(even) {
 	transform: rotate(2deg);
 }
 
-.registry .items .item:nth-child(3n) .polaroid {
+.polaroids .polaroid:nth-child(3n) {
 	transform: translate(-5px 0);
 }
 
-.registry .items .item:nth-child(5n) .polaroid {
+.polaroids .polaroid:nth-child(5n) {
 	transform: translate(5px, 0) rotate(5deg);
 }
 
-.registry .items .item:nth-child(8n) .polaroid {
+.polaroids .polaroid:nth-child(8n) {
 	transform: translate(5px, 8px);
 }
 
-.registry .items .item:nth-child(11n) .polaroid {
+.polaroids .polaroid:nth-child(11n) {
 	transform: translate(-5px, 3px);
 }
 

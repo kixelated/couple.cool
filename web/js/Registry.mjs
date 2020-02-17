@@ -39,7 +39,7 @@ export class Registry extends React.Component {
 			overlay,
 			create('p', {}, "Welcome to the gift shoppe!"),
 			create('p', {}, "You can pay for one of the below items/experiences and we'll send you a personalized photo once we buy it. You can always bring a gift in person instead!"),
-			create('div', { className: "items" }, items),
+			create('div', { className: "items polaroids" }, items),
 		)
 	}
 }

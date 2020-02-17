@@ -1,4 +1,5 @@
 import { Home } from "./Home.mjs"
+import { Couple } from "./Couple.mjs"
 import { Registry } from "./Registry.mjs"
 
 export class Site extends React.Component {
@@ -31,7 +32,8 @@ class Content extends React.Component {
 		let content
 		if (this.state.page === "#home") {
 			return React.createElement(Home)
-		//} else if (this.state.page === "#couple") {
+		} else if (this.state.page === "#couple") {
+			return React.createElement(Couple)
 		} else if (this.state.page === "#registry") {
 			return React.createElement(Registry)
 		} else {
@@ -47,6 +49,7 @@ class Banner extends React.Component {
 				React.createElement("a", { href: "#home" }, "😎"),
 				React.createElement("a", { href: "#couple" }, "Couple"),
 				React.createElement("a", { href: "#registry" }, "Registry"),
+				React.createElement("a", { href: "https://github.com/kixelated/couple.cool" }, "Source"),
 			),
 		)
 	}

@@ -7,6 +7,7 @@ locals {
 		png = "image/png"
 		jpg = "image/jpeg"
 		ico = "image/x-icon"
+		webmanifest = "application/manifest+json"
 	}
 }
 
