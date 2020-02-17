@@ -37,6 +37,8 @@ export class Registry extends React.Component {
 
 		return create('div', { className: "registry" },
 			overlay,
+			create('p', {}, "Welcome to the gift shoppe!"),
+			create('p', {}, "You can pay for one of the below items/experiences and we'll send you a personalized photo once we buy it. You can always bring a gift in person instead!"),
 			create('div', { className: "items" }, items),
 		)
 	}
@@ -64,7 +66,7 @@ class RegistryBuyForm extends React.Component {
 		}
 
 		if (this.state.phase == "approved" ) {
-			return create("p", {}, "THANKS!")
+			return create("p", {}, "THANK YOU SO MUCH. We both appreciate the gift and look forward to seeing you on the day!")
 		}
 
 		if (this.props.item.BuyerName) {
@@ -154,7 +156,11 @@ class RegistryBuyForm extends React.Component {
 
 			const back = create("button", { type: "button", onClick: goBack }, "Back")
 
-			return create("div", { className: "pay" }, paypal, back)
+			return create("div", { className: "pay" }, 
+				create("p", {}, "Click on one of the PayPal buttons to complete the purchase:"),
+				paypal,
+				back,
+			)
 		}
 
 		const goNext = (e) => {
@@ -162,31 +168,34 @@ class RegistryBuyForm extends React.Component {
 			this.setState({ phase: "paypal" })
 		}
 
-		return create('form', { onSubmit: goNext, className: "form" },
-			create('label', {}, "Name:"),
-			create('input', {
-				type: 'text',
-				value: this.state.name,
-				onChange: (e) => { this.setState({ name: e.target.value }) },
-				required: true,
-				spellCheck: false,
-			}),
-			create('label', {}, "Email:"),
-			create('input', {
-				type: 'email',
-				value: this.state.email,
-				onChange: (e) => { this.setState({ email: e.target.value }) },
-				required: true,
-			}),
-			create('label', {}, "Message:"),
-			create('textarea', {
-				value: this.state.message,
-				onChange: (e) => { this.setState({ message: e.target.value }) },
-				placeholder: 'Leave a message for the "happy" couple!',
-				spellCheck: true,
-				required: true,
-			}),
-			create("input", { type: "submit", value: "Next" }),
+		return create("div", {},
+			create("p", {}, "Enter your details if you want to buy this item for us. We'll send you a personalized picture when the deed is done."),
+			create('form', { onSubmit: goNext, className: "form" },
+				create('label', {}, "Name:"),
+				create('input', {
+					type: 'text',
+					value: this.state.name,
+					onChange: (e) => { this.setState({ name: e.target.value }) },
+					required: true,
+					spellCheck: false,
+				}),
+				create('label', {}, "Email:"),
+				create('input', {
+					type: 'email',
+					value: this.state.email,
+					onChange: (e) => { this.setState({ email: e.target.value }) },
+					required: true,
+				}),
+				create('label', {}, "Message:"),
+				create('textarea', {
+					value: this.state.message,
+					onChange: (e) => { this.setState({ message: e.target.value }) },
+					placeholder: 'Leave a message for the "happy" couple!',
+					spellCheck: true,
+					required: true,
+				}),
+				create("input", { type: "submit", value: "Next" }),
+			),
 		)
 	}
 }
@@ -201,30 +210,27 @@ class RegistryFullItem extends React.Component {
 			return null
 		}
 
-
 		const onClick = (e) => {
 			this.props.onDeselect()
 			e.preventDefault()
 		}
 
-		const header = create('div', { className: "header" }, 
-			create('img', { src: "images/" + this.props.item.Image.S }),
-			create('div', { className: "info" }, 
-				create('div', { className: "name" }, this.props.item.Name.S),
-				create('div', { className: "cost" }, this.props.item.CostDisplay.S),
-				create('p', { className: "description" }, this.props.item.Description.S),
+		const container = create('div', { className: "fullItem" },
+			create('div', { className: "header" }, 
+				create('img', { src: "images/" + this.props.item.Image.S }),
+				create('div', { className: "info" }, 
+					create('div', { className: "name" }, this.props.item.Name.S),
+					create('div', { className: "cost" }, this.props.item.CostDisplay.S),
+					create('p', { className: "description" }, this.props.item.Description.S),
+				),
+			),
+			create('div', { className: "border" }),
+			create('div', { className: "body" }, 
+				create(RegistryBuyForm, { item: this.props.item }),
 			),
 		)
 
-		const border = create('div', { className: "border" })
-
-		const body = create('div', { className: "body" }, 
-			create(RegistryBuyForm, { item: this.props.item }),
-		)
-
-		const container = create('div', { className: "fullItem" }, header, border, body)
 		const deselect = create('a', { className: "deselect", href: "#back", onClick: onClick })
-
 		const overlay = create('div', { className: "overlay" }, deselect, container, deselect)
 
 		return overlay
@@ -253,7 +259,7 @@ class RegistryItem extends React.Component {
 		}
 
 		return create('div', { className: "item" },
-			create('a', { href: "#", onClick: setSelected },
+			create('a', { className: "polaroid", href: "#", onClick: setSelected },
 				create('img', { src: "images/" + this.props.item.Image.S }),
 				create('div', { className: "name" }, this.props.item.Name.S),
 				create(RegistryItemPrice, { item: this.props.item })
