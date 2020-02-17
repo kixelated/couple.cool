@@ -6,6 +6,14 @@
 	--grey: #eaeaea;
 }
 
+a {
+	color: var(--accent);
+}
+
+a:hover {
+	color: var(--accent);
+}
+
 body {
 	background-color: var(--grey);
 }
@@ -51,22 +59,42 @@ body {
 }
 
 .home .names {
+	display: grid;
+	grid-template-columns: 1fr auto auto auto 1fr;
+	grid-gap: 2rem;
+	align-items: center;
 	font-size: 4rem;
 	border-bottom: 0.2rem solid var(--primary);
 	border-radius: 0.2rem;
 }
 
+.home .names img {
+	width: 4rem;
+	vertical-align: baseline;
+}
+
+.home .names .bride {
+	justify-self: right;
+}
+
+.home .names .fancy {
+	transform: scaleX(-1);
+}
+
 .home .names .rebe {
 	font-family: 'Dancing Script', cursive;
+	justify-self: right;
 }
 
 .home .names .plus {
 	font-family: cursive;
 	font-size: 2rem;
+	padding-top: 1rem;
 }
 
 .home .names .luke {
 	font-family: 'Gloria Hallelujah', cursive;
+	justify-self: left;
 }
 
 .home .cool {
@@ -74,18 +102,18 @@ body {
 	font-size: 1rem;
 }
 
-.home .names .plus {
-	margin: 0 1rem;
-}
-
 .home .date {
 	text-align: center;
 	font-size: 1.5rem;
-	font-family: mono;
 }
 
 .home .intro {
 	margin-top: 4rem;
+}
+
+.home .intro img {
+	display: block;
+	margin: 0 auto;
 }
 
 .registry .overlay {
