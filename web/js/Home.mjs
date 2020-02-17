@@ -20,7 +20,7 @@ export class Home extends React.Component {
 			),
 			create("div", { className: "intro" },
 				create("p", {}, "So we're getting married. A lifetime of commitment. That's cool I guess."),
-				create("p", {}, "We're actually very excited! It's not every day that you get a chance to profess your admiration for another individual in front of friends/family. Plus it's a chance to get said friends/family drunk in REDACTED. So come, celebrate the occasion that is our marriage, and the start of the next phase of our life!"),
+				create("p", {}, "We're actually very excited! It's not every day that you get a chance to profess your admiration for another individual in front of friends/family. Plus it's a chance to get said friends/family drunk in a park. So come, celebrate the occasion that is our marriage, and the start of the next phase of our life!"),
 				create("p", { style: { textAlign: "center" } },
 					create("a", { href: "#couple", className: "polaroid" },
 						create("img", { src: "images/couple.jpg" }),
