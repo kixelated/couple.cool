@@ -10,13 +10,21 @@ body {
 	background-color: var(--grey);
 }
 
-.wrapper {
-	width: min(65rem, 100vw);
-	margin: 0 auto;
+.banner {
+	display: grid;
+	grid-template-columns: 1fr min(65rem, 100vw) 1fr;
 }
 
 .banner {
 	background-color: var(--primary);
+}
+
+.banner > .logo {
+	text-align: right;
+}
+
+.banner > .wrapper {
+	grid-column: 2 / 2;
 }
 
 .banner a {
@@ -26,11 +34,61 @@ body {
 }
 
 .content {
+	width: min(70rem, 100vw);
+	margin: 0 auto;
+
 	background-color: var(--white);
 	box-shadow: 0 0 10rem rgba(94, 52, 85, 0.2);
+
+	padding: 2rem;
 }
 
-.overlay {
+.home .centerpiece {
+	text-align: center;
+
+	width: min(40rem, 100vw);
+	margin: 0 auto;
+}
+
+.home .names {
+	font-size: 4rem;
+	border-bottom: 0.2rem solid var(--primary);
+	border-radius: 0.2rem;
+}
+
+.home .names .rebe {
+	font-family: 'Dancing Script', cursive;
+}
+
+.home .names .plus {
+	font-family: cursive;
+	font-size: 2rem;
+}
+
+.home .names .luke {
+	font-family: 'Gloria Hallelujah', cursive;
+}
+
+.home .cool {
+	margin-top: 1rem;
+	font-size: 1rem;
+}
+
+.home .names .plus {
+	margin: 0 1rem;
+}
+
+.home .date {
+	text-align: center;
+	font-size: 1.5rem;
+	font-family: mono;
+}
+
+.home .intro {
+	margin-top: 4rem;
+}
+
+.registry .overlay {
 	display: flex;
 	justify-content: center;
 
@@ -44,12 +102,12 @@ body {
 	z-index: 10;
 }
 
-.overlay a.deselect {
+.registry .overlay a.deselect {
 	flex-grow: 1;
 	cursor: initial;
 }
 
-.fullItem {
+.registry .fullItem {
 	background: white;
 	width: 80%;
 	overflow: auto;
@@ -59,32 +117,32 @@ body {
 	padding: 1rem;
 }
 
-.fullItem .header {
+.registry .fullItem .header {
 	display: grid;
 	grid-template-columns: 250px 1fr;
 	grid-gap: 1rem;
 }
 
-.fullItem .header img {
+.registry .fullItem .header img {
 	width: 100%;
 }
 
-.fullItem .header .name {
+.registry .fullItem .header .name {
 	font-size: 2rem;
 	font-weight: bold
 }
 
-.fullItem .border {
+.registry .fullItem .border {
 	background: rgba(0, 0, 0, 0.1);
 }
 
-.items {
+.registry .items {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 }
 
-.item {
+.registry .items .item {
 	display: flex;
 	align-items: flex-end;
 
@@ -92,7 +150,7 @@ body {
 	padding: 1rem;
 }
 
-.item a {
+.registry .items .item a {
 	background: #fff;
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
 	padding: 1rem;
@@ -104,58 +162,58 @@ body {
 	transition: transform 0.15s linear, box-shadow 0.15s linear;
 }
 
-.item.selected {
+.registry .items .item.selected {
 }
 
-.items .item:nth-child(even) a {
+.registry .items .item:nth-child(even) a {
 	transform: rotate(2deg);
 }
 
-.items .item:nth-child(3n) a {
+.registry .items .item:nth-child(3n) a {
 	transform: translate(-5px 0);
 }
 
-.items .item:nth-child(5n) a {
+.registry .items .item:nth-child(5n) a {
 	transform: translate(5px, 0) rotate(5deg);
 }
 
-.items .item:nth-child(8n) a {
+.registry .items .item:nth-child(8n) a {
 	transform: translate(5px, 8px);
 }
 
-.items .item:nth-child(11n) a {
+.registry .items .item:nth-child(11n) a {
 	transform: translate(-5px, 3px);
 }
 
-.item a:hover {
+.registry .items .item a:hover {
 	transform: scale(1.2) !important;
 	z-index: 5;
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
 }
 
-.item img {
+.registry .items .item img {
 	width: 100%;
 	object-fit: cover;
 }
 
-.item .name {
+.registry .item .name {
 	font-size: 1.5rem;
 }
 
-.buyer {
+.registry .buyer {
 	color: #b50000;
 }
 
-.pay .pal {
+.registry .pay .pal {
 	text-align: center;
 }
 
-.pay button {
+.registry .pay button {
 	width: 6rem;
 	height: 2rem;
 }
 
-.form {
+.registry .form {
 	display: grid;
 	grid-template-columns: 6rem 1fr 6rem;
 	grid-template-rows: 2rem 2rem 1fr 2rem;
@@ -165,22 +223,22 @@ body {
 	height: 100%;
 }
 
-.form label {
+.registry .form label {
 	grid-column: 1 / 2;
 	justify-self: right;
 	margin: 0;
 }
 
-.form input, .form button {
+.registry .form input, .registry .form button {
 	grid-column: 2 / 4;
 }
 
-.form textarea {
+.registry .form textarea {
 	grid-column: 2 / 4;
 	height: 100%;
 	width: 100%;
 }
 
-.form input[type="submit"] {
+.registry .form input[type="submit"] {
 	grid-column: 3 / 4;
 }

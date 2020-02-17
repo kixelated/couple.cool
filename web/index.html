@@ -13,24 +13,21 @@
 
 	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
 	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+	<link href="https://fonts.googleapis.com/css?family=Dancing+Script|Gloria+Hallelujah&display=swap" rel="stylesheet">
 </head>
 
 <body>
-	<div class="banner">
-		<div class="wrapper">
-			<a href="#/">Home</a>
-			<a href="#/story">Story</a>
-			<a href="#/pictures">Pictures</a>
-			<a href="#/gifts">Gifts</a>
-		</div>
-	</div>
-	<div class="wrapper">
-		<div class="content">
-			<div id="registry"></div>
-		</div>
-	</div>
+	<div id="site"></div>
 
-	<script src="./site.js"></script>
+	<script type="module">
+		import { Site } from "./Site.mjs"
+
+		const container = document.getElementById('site')
+		const site = React.createElement(Site, { page: window.location.hash || "home" })
+
+		ReactDOM.render(site, container)
+	</script>
 </body>
 
 </html>

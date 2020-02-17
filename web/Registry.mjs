@@ -1,8 +1,48 @@
 const create = React.createElement;
-
 const PaypalButton = paypal.Buttons.driver("react", { React, ReactDOM })
 
-class BuyForm extends React.Component {
+export class Registry extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			items: [],
+			selected: null,
+		}
+
+		fetch('/api/items').then((resp) => {
+			return resp.json()
+		}).then((items) => {
+			this.setState({ items: items })
+		})
+	}
+
+	render() {
+		const setSelected = (item) => {
+			this.setState({ selected: item })
+		}
+
+		const overlay = create(RegistryFullItem, {
+			item: this.state.selected,
+			onDeselect: setSelected,
+		})
+
+		const items = this.state.items.map((item) => {
+			return create(RegistryItem, {
+				item: item,
+				key: item.Id.S,
+				setSelected: setSelected,
+			})
+		})
+
+		return create('div', { className: "registry" },
+			overlay,
+			create('div', { className: "items" }, items),
+		)
+	}
+}
+
+class RegistryBuyForm extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -151,7 +191,7 @@ class BuyForm extends React.Component {
 	}
 }
 
-class FullItem extends React.Component {
+class RegistryFullItem extends React.Component {
 	constructor(props) {
 		super(props)
 	}
@@ -179,7 +219,7 @@ class FullItem extends React.Component {
 		const border = create('div', { className: "border" })
 
 		const body = create('div', { className: "body" }, 
-			create(BuyForm, { item: this.props.item }),
+			create(RegistryBuyForm, { item: this.props.item }),
 		)
 
 		const container = create('div', { className: "fullItem" }, header, border, body)
@@ -221,48 +261,3 @@ class RegistryItem extends React.Component {
 		)
 	}
 }
-
-class Registry extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			items: [],
-			selected: null,
-		}
-
-		fetch('/api/items').then((resp) => {
-			return resp.json()
-		}).then((items) => {
-			this.setState({ items: items })
-		})
-	}
-
-	render() {
-		const setSelected = (item) => {
-			this.setState({ selected: item })
-		}
-
-		const overlay = create(FullItem, {
-			item: this.state.selected,
-			onDeselect: setSelected,
-		})
-
-		const items = this.state.items.map((item) => {
-			return create(RegistryItem, {
-				item: item,
-				key: item.Id.S,
-				setSelected: setSelected,
-			})
-		})
-
-		const itemsContainer = create('div', { className: "items" }, items)
-
-		return create('div', { className: "container" }, overlay, itemsContainer)
-	}
-}
-
-const registry = create(Registry)
-const container = document.getElementById('registry')
-
-ReactDOM.render(registry, container)
