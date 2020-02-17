@@ -129,23 +129,29 @@ body {
 }
 
 .registry .fullItem {
-	background: white;
-	width: 80%;
+	background: var(--white);
+	width: 100%;
+	max-width: 60rem;
 	overflow: auto;
 	display: grid;
-	grid-template-rows: auto 5px 1fr;
+	grid-template-rows: auto 1fr;
 	grid-gap: 1rem;
-	padding: 1rem;
 }
 
 .registry .fullItem .header {
 	display: grid;
 	grid-template-columns: 250px 1fr;
 	grid-gap: 1rem;
+	background-color: var(--primary);
+	color: var(--white);
 }
 
 .registry .fullItem .header img {
 	width: 100%;
+}
+
+.registry .fullItem .header .info {
+	padding: 1rem;
 }
 
 .registry .fullItem .header .name {
@@ -155,6 +161,10 @@ body {
 
 .registry .fullItem .border {
 	background: rgba(0, 0, 0, 0.1);
+}
+
+.registry .fullItem .body {
+	padding: 1rem;
 }
 
 .registry .polaroids {
@@ -170,7 +180,7 @@ body {
 }
 
 .couple .polaroid {
-	width: 20rem;
+	width: 24rem;
 	margin: 2rem;
 }
 
@@ -268,7 +278,7 @@ body {
 	margin: 0;
 }
 
-.registry .form input, .registry .form button {
+.registry .form input {
 	grid-column: 2 / 4;
 }
 
@@ -276,6 +286,10 @@ body {
 	grid-column: 2 / 4;
 	height: 100%;
 	width: 100%;
+}
+
+.registry .form button {
+	grid-column: 1 / 2;
 }
 
 .registry .form input[type="submit"] {

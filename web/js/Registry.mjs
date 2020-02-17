@@ -156,7 +156,7 @@ class RegistryBuyForm extends React.Component {
 
 			const back = create("button", { type: "button", onClick: goBack }, "Back")
 
-			return create("div", { className: "pay" }, 
+			return create("div", { className: "pay" },
 				create("p", {}, "Click on one of the PayPal buttons to complete the purchase:"),
 				paypal,
 				back,
@@ -164,8 +164,13 @@ class RegistryBuyForm extends React.Component {
 		}
 
 		const goNext = (e) => {
-			e.preventDefault()
 			this.setState({ phase: "paypal" })
+			e.preventDefault()
+		}
+
+		const goBack = (e) => {
+			this.props.onDeselect()
+			e.preventDefault()
 		}
 
 		return create("div", {},
@@ -188,12 +193,14 @@ class RegistryBuyForm extends React.Component {
 				}),
 				create('label', {}, "Message:"),
 				create('textarea', {
+					rows: 4,
 					value: this.state.message,
 					onChange: (e) => { this.setState({ message: e.target.value }) },
 					placeholder: 'Leave a message for the "happy" couple!',
 					spellCheck: true,
 					required: true,
 				}),
+				create("button", { type: "button", onClick: goBack }, "Back"),
 				create("input", { type: "submit", value: "Next" }),
 			),
 		)
@@ -216,17 +223,16 @@ class RegistryFullItem extends React.Component {
 		}
 
 		const container = create('div', { className: "fullItem" },
-			create('div', { className: "header" }, 
+			create('div', { className: "header" },
 				create('img', { src: "images/" + this.props.item.Image.S }),
-				create('div', { className: "info" }, 
+				create('div', { className: "info" },
 					create('div', { className: "name" }, this.props.item.Name.S),
 					create('div', { className: "cost" }, this.props.item.CostDisplay.S),
 					create('p', { className: "description" }, this.props.item.Description.S),
 				),
 			),
-			create('div', { className: "border" }),
-			create('div', { className: "body" }, 
-				create(RegistryBuyForm, { item: this.props.item }),
+			create('div', { className: "body" },
+				create(RegistryBuyForm, { item: this.props.item, onDeselect: this.props.onDeselect }),
 			),
 		)
 

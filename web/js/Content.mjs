@@ -22,7 +22,7 @@ export class Content extends React.Component {
 			return React.createElement(Home)
 		} else if (this.state.page === "#photos") {
 			return React.createElement(Photos)
-		} else if (this.state.page === "#registry") {
+		} else if (this.state.page === "#gifts") {
 			return React.createElement(Registry)
 		} else {
 			return React.createElement("div", { className: "error" }, "Unknown page")
