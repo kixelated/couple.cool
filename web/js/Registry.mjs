@@ -248,10 +248,6 @@ class RegistryItemPrice extends React.Component {
 }
 
 class RegistryItem extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-
 	render() {
 		const setSelected = (e) => {
 			this.props.setSelected(this.props.item)

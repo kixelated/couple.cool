@@ -3,8 +3,10 @@ locals {
 		html = "text/html; charset=utf-8"
 		css = "text/css; charset=utf-8"
 		js = "application/javascript"
+		mjs = "application/javascript"
 		png = "image/png"
 		jpg = "image/jpeg"
+		ico = "image/x-icon"
 	}
 }
 

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 
 <head>
+	<title>Rebe+Luke</title>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon/32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon/16x16.png">
+	<link rel="manifest" href="site.webmanifest">
+
 	<!-- Ensures optimal rendering on mobile devices. -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- Optimal Internet Explorer compatibility -->
@@ -21,7 +28,7 @@
 	<div id="site"></div>
 
 	<script type="module">
-		import { Site } from "./Site.mjs"
+		import { Site } from "./js/Site.mjs"
 
 		const container = document.getElementById('site')
 		const site = React.createElement(Site, { page: window.location.hash || "home" })
