@@ -11,21 +11,10 @@ app.use(express.json())
 
 app.get('/items', async (req, res) => {
 	try {
-		const paypalSecrets = await secrets.getSecretValue({ SecretId: "wedding_paypal" }).promise()
-		const paypalCreds = JSON.parse(paypalSecrets.SecretString)
-		const paypalEnv = new paypal.core.SandboxEnvironment(paypalCreds.id, paypalCreds.secret)
-		const paypalClient = new paypal.core.PayPalHttpClient(paypalEnv)
-
 		const data = await dynamodb.scan({
 			TableName: 'registry.items',
-			AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'CostDisplay', 'BuyerName' ],
+			AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'CostDisplay', 'Sold' ],
 		}).promise()
-
-		for (const item of data.Items) {
-			if (item.BuyerName) {
-				item.BuyerName = { S: "Anonymous" }
-			}
-		}
 
 		res.status(200).json(data.Items)
 	} catch (err) {
@@ -37,7 +26,7 @@ app.get('/items', async (req, res) => {
 app.post('/purchase', async (req, res) => {
 	try {
 		// Start fetching the paypal credentials
-		const paypalPromise = await secrets.getSecretValue({ SecretId: "wedding_paypal" }).promise()
+		const paypalPromise = secrets.getSecretValue({ SecretId: "wedding_paypal" }).promise()
 
 		const name = req.body.name
 		if (!name) {
@@ -73,7 +62,7 @@ app.post('/purchase', async (req, res) => {
 		const itemPromise = dynamodb.getItem({
 			TableName: 'registry.items',
 			Key: { 'Id': { 'S': itemID }, },
-			AttributesToGet: [ "Id", "Cost", "BuyerOrder", "BuyerCapture" ],
+			AttributesToGet: [ "Id", "Cost", "Sold", ],
 		}).promise()
 
 		// Set up the paypal client
@@ -94,7 +83,7 @@ app.post('/purchase', async (req, res) => {
 		console.log("item:", JSON.stringify(item, null, 2))
 
 		// See if the item was purchased already
-		if (item.BuyerOrder || item.BuyerCapture) {
+		if (item.Sold) {
 			throw "just purchased; find something else!"
 		}
 
@@ -127,88 +116,70 @@ app.post('/purchase', async (req, res) => {
 			throw "wrong order amount: " + amount.value + " != " + item.Cost.N
 		}
 
-		// Update the registry table with our intent to capture.
-		const update = await dynamodb.updateItem({
-			TableName: 'registry.items',
-			Key: {
-				'Id': { 'S': itemID },
-			},
-			ExpressionAttributeNames: {
-				"#BO": "BuyerOrder",
-			},
-			ExpressionAttributeValues: {
-				":bo": { S: orderID },
-			},
-			ConditionExpression: "attribute_not_exists(#BO)",
-			UpdateExpression: "SET #BO = :bo",
-		}).promise()
+		// Capture the order so we get PAID
+		const captureRequest = new paypal.orders.OrdersCaptureRequest(orderID)
+		captureRequest.prefer("return=minimal");
+		captureRequest.requestBody({});
+
+		const capture = await paypalClient.execute(captureRequest)
+		console.log("capture:", JSON.stringify(capture, null, 2));
+
+		if (capture.result.status != "COMPLETED") {
+			throw "unknown capture status: " + capture.result.status
+		}
+
+		const captureID = capture.result.id
 
 		try {
-			// Capture the order so we get PAID
-			const captureRequest = new paypal.orders.OrdersCaptureRequest(orderID)
-			captureRequest.prefer("return=minimal");
-			captureRequest.requestBody({});
-
-			const capture = await paypalClient.execute(captureRequest)
-			console.log("capture:", JSON.stringify(capture, null, 2));
-
-			if (capture.result.status != "COMPLETED") {
-				throw "unknown capture status: " + capture.result.status
-			}
-
-			const captureID = capture.result.id
-
-			try {
-				const update2 = await dynamodb.updateItem({
-					TableName: 'registry.items',
-					Key: { 'Id': { 'S': itemID }, },
-					ExpressionAttributeNames: {
-						"#BO": "BuyerOrder",
-						"#BC": "BuyerCapture",
-
-						"#BE": "BuyerEmail",
-						"#BN": "BuyerName",
-						"#BM": "BuyerMessage",
-					},
-					ExpressionAttributeValues: {
-						":be": { S: email },
-						":bn": { S: name },
-						":bm": { S: message },
-						":bo": { S: orderID },
-						":bc": { S: captureID },
-					},
-					ConditionExpression: "#BO = :bo", // not required but just to be safe
-					UpdateExpression: "SET #BE = :be, #BN = :bn, #BM = :bm, #BC = :bc",
-				}).promise()
-
-				res.status(200).json({})
-			} catch (err) {
-				const refundRequest = new paypal.payments.CapturesRefundRequest(captureID)
-				refundRequest.prefer("return=minimal");
-				refundRequest.requestBody({
-					note_to_payer: "Something went wrong at the very end and this is embarassing but at least i am a capable programmer",
-				});
-
-				const refund = await paypalClient.execute(refundRequest)
-				console.log("refund:", JSON.stringify(refund, null, 2));
-
-				throw err
-			}
-		} catch (err) {
-			const undoUpdate = await dynamodb.updateItem({
-				TableName: 'registry.items',
-				Key: { 'Id': { 'S': itemID }, },
-				ExpressionAttributeNames: {
-					"#BO": "BuyerOrder",
+			// Insert an item into the payments table
+			const put = await dynamodb.putItem({
+				TableName: 'registry.payments',
+				Item: {
+					'Item': { S: itemID },
+					'Order': { S: orderID },
+					'Capture': { S: captureID },
+					'Email': { S: email },
+					'Name': { S: name },
+					'Message': { S: message },
+					'Amount': { N: cost },
 				},
-				ExpressionAttributeValues: {
-					":bo": { S: orderID },
-				},
-				ConditionExpression: "#BO = :bo",
-				UpdateExpression: "REMOVE #BO",
 			}).promise()
 
-			console.log("undo update:", JSON.stringify(undoUpdate, null, 2));
+			console.log("put:", JSON.stringify(put, null, 2));
+
+			if (item.Cost.N > 0) {
+				// Update the items table to mark it SOLD
+				const update = await dynamodb.updateItem({
+					TableName: 'registry.items',
+					Key: {
+						'Id': { 'S': itemID },
+					},
+					ExpressionAttributeNames: {
+						"#S": "Sold",
+					},
+					ExpressionAttributeValues: {
+						":s": { BOOL: true },
+					},
+					ConditionExpression: "#S != :s",
+					UpdateExpression: "SET #S = :s",
+				}).promise()
+
+				console.log("update:", JSON.stringify(update, null, 2));
+			}
+
+			res.status(200).json({})
+		} catch (err) {
+			console.error(err)
+
+			const refundRequest = new paypal.payments.CapturesRefundRequest(captureID)
+			refundRequest.prefer("return=minimal");
+			refundRequest.requestBody({
+				note_to_payer: "Something went wrong at the very end. This is embarassing so here's a refund.",
+			});
+
+			const refund = await paypalClient.execute(refundRequest)
+
+			console.log("refund:", JSON.stringify(refund, null, 2));
 
 			throw err
 		}

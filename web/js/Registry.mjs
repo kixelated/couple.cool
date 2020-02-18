@@ -77,7 +77,7 @@ class RegistryBuyForm extends React.Component {
 			return create("p", {}, "THANK YOU SO MUCH. We both appreciate the gift and look forward to seeing you on the day!")
 		}
 
-		if (this.props.item.BuyerName) {
+		if (this.props.item.Sold) {
 			return create('div', { className: "buyer" }, "Already purchased; go find something else!")
 		}
 
@@ -151,7 +151,7 @@ class RegistryBuyForm extends React.Component {
 						}
 
 						this.setState({ phase: "approved" })
-						this.props.item.BuyerName = { S: "Anonymous" }
+						this.props.item.Sold = { BOOL: true }
 					} catch (err) {
 						console.error(err)
 						this.setState({ error: err })
@@ -280,7 +280,7 @@ class RegistryFullItem extends React.Component {
 
 class RegistryItemPrice extends React.Component {
 	render() {
-		if (!this.props.item.BuyerName) {
+		if (!this.props.item.Sold) {
 			return create('div', { className: "cost"}, this.props.item.CostDisplay.S)
 		}
 

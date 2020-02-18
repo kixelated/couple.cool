@@ -29,7 +29,10 @@ data "aws_iam_policy_document" "wedding_assume" {
 data "aws_iam_policy_document" "wedding_policy" {
 	statement {
 		actions = [ "dynamodb:*" ]
-		resources = [ aws_dynamodb_table.items.arn ]
+		resources = [
+			aws_dynamodb_table.items.arn,
+			aws_dynamodb_table.payments.arn,
+		]
 	}
 
 	statement {
