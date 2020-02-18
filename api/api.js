@@ -141,7 +141,7 @@ app.post('/purchase', async (req, res) => {
 					'Email': { S: email },
 					'Name': { S: name },
 					'Message': { S: message },
-					'Amount': { N: cost },
+					'Amount': { N: cost.toString() },
 				},
 			}).promise()
 
