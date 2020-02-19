@@ -29,7 +29,7 @@ export class Home extends React.Component {
 				create("p", {},
 					create(React.Fragment, {},
 						"You can ",
-						create("a", { href: "#couple" }, "view pictures"),
+						create("a", { href: "#photos" }, "view pictures"),
 						" of said cool couple, or perhaps ",
 						create("a", { href: "#registry" }, "visit our registry"),
 						" and shower us in gifts. So many posibilities!"

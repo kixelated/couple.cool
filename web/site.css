@@ -204,6 +204,7 @@ body {
 	transform: rotate(-2deg);
 	transition: transform 0.15s linear, box-shadow 0.15s linear;
 
+	text-align: center;
 }
 
 .polaroids .polaroid:nth-child(even) {
@@ -241,15 +242,20 @@ body {
 
 .polaroid p {
 	margin-top: 1rem;
-	text-align: center;
+	margin-bottom: 0;
 }
 
 .polaroid .name {
-	font-size: 1.5rem;
+	text-decoration: underline;
+}
+
+.polaroid .cost {
+	font-size: 1rem;
 }
 
 .registry .buyer {
 	color: rgb(var(--red));
+	font-size: 1rem;
 }
 
 .registry .pay .pal {

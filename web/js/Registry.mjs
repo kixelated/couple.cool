@@ -64,7 +64,7 @@ class RegistryBuyForm extends React.Component {
 			}
 
 			return create("div", {},
-				create("p", { className: "error" }, this.state.error),
+				create("p", { className: "error" }, "error: " + JSON.stringify(this.state.error)),
 				create("button", { type: "button", onClick: goBack }, "Back"),
 			)
 		}
@@ -74,7 +74,15 @@ class RegistryBuyForm extends React.Component {
 		}
 
 		if (this.state.phase == "approved" ) {
-			return create("p", {}, "THANK YOU SO MUCH. We both appreciate the gift and look forward to seeing you on the day!")
+			const goBack = (e) => {
+				this.setState({ phase: "form" })
+			}
+
+			return create("div", {},
+				create("p", {}, "THANK YOU SO MUCH!"),
+				create("p", {}, "We appreciate the gift and hope to see you at our wedding!"),
+				create("button", { type: "button", onClick: goBack }, "Back"),
+			)
 		}
 
 		if (this.props.item.Sold) {
@@ -83,7 +91,6 @@ class RegistryBuyForm extends React.Component {
 
 		if (this.state.phase == "paypal")  {
 			const paypal = create(PaypalButton, {
-				className: "pal",
 				createOrder: (data, actions) => {
 					return actions.order.create({
 						intent: "CAPTURE",
@@ -151,7 +158,10 @@ class RegistryBuyForm extends React.Component {
 						}
 
 						this.setState({ phase: "approved" })
-						this.props.item.Sold = { BOOL: true }
+
+						if (this.props.item.Cost.N > 0) {
+							this.props.item.Sold = { BOOL: true }
+						}
 					} catch (err) {
 						console.error(err)
 						this.setState({ error: err })
@@ -163,12 +173,11 @@ class RegistryBuyForm extends React.Component {
 				this.setState({ phase: "form" })
 			}
 
-			const back = create("button", { type: "button", onClick: goBack }, "Back")
 
 			return create("div", { className: "pay" },
 				create("p", {}, "Click on one of the PayPal buttons to complete the purchase:"),
-				paypal,
-				back,
+				create("div", { className: "pal" }, paypal),
+				create("button", { type: "button", onClick: goBack }, "Back"),
 			)
 		}
 
@@ -281,10 +290,10 @@ class RegistryFullItem extends React.Component {
 class RegistryItemPrice extends React.Component {
 	render() {
 		if (!this.props.item.Sold) {
-			return create('div', { className: "cost"}, this.props.item.CostDisplay.S)
+			return create('p', { className: "cost"}, this.props.item.CostDisplay.S)
 		}
 
-		return create('div', { className: "buyer" }, "TAKEN!")
+		return create('p', { className: "buyer" }, "TAKEN!")
 	}
 }
 
@@ -297,7 +306,7 @@ class RegistryItem extends React.Component {
 
 		return create('a', { className: "polaroid", href: "#", onClick: setSelected },
 			create('img', { src: "images/" + this.props.item.Image.S }),
-			create('div', { className: "name" }, this.props.item.Name.S),
+			create('p', { className: "name" }, this.props.item.Name.S),
 			create(RegistryItemPrice, { item: this.props.item })
 		)
 	}

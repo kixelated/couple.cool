@@ -87,8 +87,14 @@ app.post('/purchase', async (req, res) => {
 			throw "just purchased; find something else!"
 		}
 
-		if (item.Cost.N && parseInt(item.Cost.N) != cost) {
-			throw "paid doesn't match item cost: " + cost + " != " + item.Cost.N
+		const itemCost = parseInt(item.Cost.N)
+
+		if (isNaN(itemCost)) {
+			throw "failed to parse item cost"
+		}
+
+		if (itemCost > 0 && itemCost != cost) {
+			throw "paid doesn't match item cost: " + cost + " != " + itemCost
 		}
 
 		// Validate the order
@@ -108,12 +114,13 @@ app.post('/purchase', async (req, res) => {
 			throw "wrong order currency: " + amount.currency_code
 		}
 
-		if (cost != parseInt(amount.value)) {
-			throw "cost doesn't match paid: " + cost + " != " + amount.value
+		const amountValue = parseInt(amount.value)
+		if (cost != amountValue) {
+			throw "cost doesn't match paid: " + cost + " != " + amountValue
 		}
 
-		if (item.Cost.N && parseInt(amount.value) != parseInt(item.Cost.N)) {
-			throw "wrong order amount: " + amount.value + " != " + item.Cost.N
+		if (itemCost > 0 && amountValue != itemCost) {
+			throw "wrong order amount: " + amountValue + " != " + itemCost
 		}
 
 		// Capture the order so we get PAID
@@ -147,7 +154,7 @@ app.post('/purchase', async (req, res) => {
 
 			console.log("put:", JSON.stringify(put, null, 2));
 
-			if (item.Cost.N > 0) {
+			if (itemCost > 0) {
 				// Update the items table to mark it SOLD
 				const update = await dynamodb.updateItem({
 					TableName: 'registry.items',
@@ -160,7 +167,7 @@ app.post('/purchase', async (req, res) => {
 					ExpressionAttributeValues: {
 						":s": { BOOL: true },
 					},
-					ConditionExpression: "#S != :s",
+					ConditionExpression: "#S <> :s",
 					UpdateExpression: "SET #S = :s",
 				}).promise()
 

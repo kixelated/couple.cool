@@ -122,7 +122,7 @@ ITEM
 			"Name": { "S": "Cold Hard Cash" },
 			"Description": { "S": "For the free-market capitalist that would rather give redeemable paper than sentimental gifts. Enter an amount greater than $1" },
 			"Cost": { "N": "0" },
-			"CostDisplay": { "S": "Custom" },
+			"CostDisplay": { "S": "custom amount" },
 			"Image": { "S": "classy.png" }
 		}
 ITEM
@@ -133,7 +133,7 @@ ITEM
 			"Name": { "S": "Donate" },
 			"Description": { "S": "We don't actually need any of this stuff. We can instead donate to a charity! Enter an amount greater than $1" },
 			"Cost": { "N": "0" },
-			"CostDisplay": { "S": "Custom" },
+			"CostDisplay": { "S": "custom amount" },
 			"Image": { "S": "classy.png" }
 		}
 ITEM
