@@ -8,6 +8,8 @@ locals {
 		jpg = "image/jpeg"
 		ico = "image/x-icon"
 		webmanifest = "application/manifest+json"
+		woff = "font/woff"
+		woff2 = "font/woff2"
 	}
 }
 
