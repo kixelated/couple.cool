@@ -1,6 +1,7 @@
 import { Home } from "./Home.mjs"
 import { Photos } from "./Photos.mjs"
 import { Registry } from "./Registry.mjs"
+import { Venue } from "./Venue.mjs"
 
 export class Content extends React.Component {
 	constructor(props) {
@@ -33,6 +34,8 @@ export class Content extends React.Component {
 			return React.createElement(Photos)
 		} else if (this.state.page === "#gifts") {
 			return React.createElement(Registry, { items: this.state.items })
+		} else if (this.state.page === "#venue") {
+			return React.createElement(Venue)
 		} else {
 			return React.createElement("div", { className: "error" }, "Unknown page")
 		}
