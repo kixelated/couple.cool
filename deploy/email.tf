@@ -41,15 +41,21 @@ resource "aws_ses_active_receipt_rule_set" "default" {
 }
 
 resource "aws_s3_bucket" "emails" {
-	bucket = "couple-cool-emails"
+	bucket = "emails.couple.cool"
 	acl    = "private"
+
+	lifecycle_rule {
+		enabled = true
+		expiration {
+			days = 90
+		}
+	}
 }
 
 resource "aws_ses_receipt_rule" "store" {
 	name          = "store"
 	rule_set_name = aws_ses_receipt_rule_set.default.rule_set_name
 	recipients    = [
-		"admin@couple.cool",
 		"luke@couple.cool",
 		"rebe@couple.cool",
 	]

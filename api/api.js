@@ -190,7 +190,7 @@ app.post('/purchase', async (req, res) => {
 			throw err
 		}
 
-		const htmlEmail = `<p>${ escapeHtml(toTitleCase(name)) }, thank you so much for you gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it.</p><p>Just a reminder, you gave us \$${ cost } for ${ item.Name.S } and left a message: <pre>${ escapeHtml(message) }</pre></p><p>THANKS AGAIN<br />&tab;-- Rebe and Luke</p>`
+		const htmlEmail = `<p>${ escapeHtml(toTitleCase(name)) }, thank you so much for you gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it.</p><p>Just a reminder, you gave us \$${ cost } for ${ item.Name.S } and left a message: <pre>${ escapeHtml(message) }</pre></p><p></p><p>THANKS AGAIN<br />&tab;-- Rebe and Luke</p>`
 
 		const textEmail = `${ toTitleCase(name) }, thank you so much for your gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it. Just a reminder, you gave us \$${ cost } for ${ item.Name.S } and left the message: "${ message }" THANKS AGAIN -- Rebe and Luke`
 
@@ -218,7 +218,7 @@ app.post('/purchase', async (req, res) => {
 				},
 				Subject: {
 					Charset: "UTF-8",
-					Data: "Thanks for your gift!",
+					Data: "Thank you for your gift!",
 				},
 			},
 			Source: "luke@couple.cool",
