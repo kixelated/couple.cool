@@ -6,15 +6,8 @@ export class Registry extends React.Component {
 		super(props);
 
 		this.state = {
-			items: [],
 			selected: null,
 		}
-
-		fetch('/api/items').then((resp) => {
-			return resp.json()
-		}).then((items) => {
-			this.setState({ items: items })
-		})
 	}
 
 	render() {
@@ -27,7 +20,7 @@ export class Registry extends React.Component {
 			onDeselect: setSelected,
 		})
 
-		const items = this.state.items.map((item) => {
+		const items = this.props.items.map((item) => {
 			return create(RegistryItem, {
 				item: item,
 				key: item.Id.S,

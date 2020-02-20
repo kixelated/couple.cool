@@ -12,7 +12,16 @@ export class Content extends React.Component {
 			})
 		})
 
-		this.state = { page: window.location.hash || "#home" }
+		this.state = {
+			page: window.location.hash || "#home",
+			items: [],
+		}
+
+		fetch('/api/items').then((resp) => {
+			return resp.json()
+		}).then((items) => {
+			this.setState({ items: items })
+		})
 	}
 
 	render() {
@@ -23,7 +32,7 @@ export class Content extends React.Component {
 		} else if (this.state.page === "#photos") {
 			return React.createElement(Photos)
 		} else if (this.state.page === "#gifts") {
-			return React.createElement(Registry)
+			return React.createElement(Registry, { items: this.state.items })
 		} else {
 			return React.createElement("div", { className: "error" }, "Unknown page")
 		}
