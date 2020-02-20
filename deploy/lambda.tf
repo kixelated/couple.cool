@@ -6,7 +6,7 @@ data "archive_file" "wedding" {
 
 resource "aws_iam_role" "wedding" {
 	name = "wedding_role"
-	assume_role_policy = data.aws_iam_policy_document.wedding_assume.json
+	assume_role_policy = data.aws_iam_policy_document.assume.json
 }
 
 resource "aws_iam_role_policy" "wedding" {
@@ -15,7 +15,7 @@ resource "aws_iam_role_policy" "wedding" {
 	policy = data.aws_iam_policy_document.wedding_policy.json
 }
 
-data "aws_iam_policy_document" "wedding_assume" {
+data "aws_iam_policy_document" "assume" {
 	statement {
 		actions = [ "sts:AssumeRole" ]
 
@@ -43,6 +43,11 @@ data "aws_iam_policy_document" "wedding_policy" {
 	statement {
 		actions = [ "secretsmanager:GetSecretValue" ]
 		resources = [ data.aws_secretsmanager_secret.wedding_paypal.arn ]
+	}
+
+	statement {
+		actions = [ "ses:SendEmail", "ses:SendRawEmail" ]
+		resources = [ "*" ]
 	}
 }
 

@@ -6,6 +6,7 @@ const paypal = require('@paypal/checkout-server-sdk')
 const app = express()
 const dynamodb = new aws.DynamoDB({ apiVersion: '2012-08-10' })
 const secrets = new aws.SecretsManager({ apiVersion: '2017-10-17' })
+const ses = new aws.SES({ apiVersion: '2010-12-01' })
 
 app.use(express.json())
 
@@ -62,7 +63,7 @@ app.post('/purchase', async (req, res) => {
 		const itemPromise = dynamodb.getItem({
 			TableName: 'registry.items',
 			Key: { 'Id': { 'S': itemID }, },
-			AttributesToGet: [ "Id", "Cost", "Sold", ],
+			AttributesToGet: [ "Id", "Name", "Cost", "Sold", ],
 		}).promise()
 
 		// Set up the paypal client
@@ -173,8 +174,6 @@ app.post('/purchase', async (req, res) => {
 
 				console.log("update:", JSON.stringify(update, null, 2));
 			}
-
-			res.status(200).json({})
 		} catch (err) {
 			console.error(err)
 
@@ -190,10 +189,63 @@ app.post('/purchase', async (req, res) => {
 
 			throw err
 		}
+
+		const htmlEmail = `<p>${ escapeHtml(toTitleCase(name)) }, thank you so much for you gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it.</p><p>Just a reminder, you gave us \$${ cost } for ${ item.Name.S } and left a message: <pre>${ escapeHtml(message) }</pre></p><p>THANKS AGAIN<br />&tab;-- Rebe and Luke</p>`
+
+		const textEmail = `${ toTitleCase(name) }, thank you so much for your gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it. Just a reminder, you gave us \$${ cost } for ${ item.Name.S } and left the message: "${ message }" THANKS AGAIN -- Rebe and Luke`
+
+		// Try sending an email but don't refund them if it fails!
+		await ses.sendEmail({
+			Destination: {
+				CcAddresses: [
+					"rebe@couple.cool",
+					"luke@couple.cool",
+				],
+				ToAddresses: [
+					email,
+				],
+			},
+			Message: {
+				Body: {
+					Html: {
+						Charset: "UTF-8",
+						Data: htmlEmail,
+					},
+					Text: {
+						Charset: "UTF-8",
+						Data: textEmail,
+					},
+				},
+				Subject: {
+					Charset: "UTF-8",
+					Data: "Thanks for your gift!",
+				},
+			},
+			Source: "luke@couple.cool",
+		}).promise()
+
+		res.status(200).json({})
 	} catch(err) {
 		console.error(err)
 		res.status(500).json({ error: err })
 	}
 })
+
+function escapeHtml(unsafe) {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
+function toTitleCase(phrase) {
+	return phrase
+		.toLowerCase()
+		.split(' ')
+		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ');
+}
 
 module.exports = app

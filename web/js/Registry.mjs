@@ -75,12 +75,13 @@ class RegistryBuyForm extends React.Component {
 
 		if (this.state.phase == "approved" ) {
 			const goBack = (e) => {
-				this.setState({ phase: "form" })
+				e.preventDefault()
+				this.props.onDeselect()
 			}
 
 			return create("div", {},
 				create("p", {}, "THANK YOU SO MUCH!"),
-				create("p", {}, "We appreciate the gift and hope to see you at our wedding!"),
+				create("p", {}, "We appreciate the gift and hopefully we'll see you at our wedding!"),
 				create("button", { type: "button", onClick: goBack }, "Back"),
 			)
 		}
@@ -172,7 +173,6 @@ class RegistryBuyForm extends React.Component {
 			const goBack = (e) => {
 				this.setState({ phase: "form" })
 			}
-
 
 			return create("div", { className: "pay" },
 				create("p", {}, "Click on one of the PayPal buttons to complete the purchase:"),
@@ -271,19 +271,20 @@ class RegistryFullItem extends React.Component {
 				create('img', { src: "images/" + this.props.item.Image.S }),
 				create('div', { className: "info" },
 					create('div', { className: "name" }, this.props.item.Name.S),
-					create('div', { className: "cost" }, this.props.item.CostDisplay.S),
+					create('div', { className: "cost" }, this.props.item.Cost.N > 0 ? this.props.item.CostDisplay.S : ""),
 					create('p', { className: "description" }, this.props.item.Description.S),
 				),
 			),
 			create('div', { className: "body" },
-				create(RegistryBuyForm, { item: this.props.item, onDeselect: this.props.onDeselect }),
+				create(RegistryBuyForm, {
+					item: this.props.item,
+					onDeselect: this.props.onDeselect,
+				}),
 			),
 		)
 
 		const deselect = create('a', { className: "deselect", href: "#back", onClick: onClick })
-		const overlay = create('div', { className: "overlay" }, deselect, container, deselect)
-
-		return overlay
+		return create('div', { className: "overlay" }, deselect, container, deselect)
 	}
 }
 
