@@ -1,5 +1,5 @@
 import { Home } from "./Home.mjs"
-import { Photos } from "./Photos.mjs"
+import { Couple } from "./Couple.mjs"
 import { Registry } from "./Registry.mjs"
 import { Venue } from "./Venue.mjs"
 
@@ -30,8 +30,8 @@ export class Content extends React.Component {
 
 		if (this.state.page === "#home") {
 			return React.createElement(Home)
-		} else if (this.state.page === "#photos") {
-			return React.createElement(Photos)
+		} else if (this.state.page === "#couple") {
+			return React.createElement(Couple)
 		} else if (this.state.page === "#gifts") {
 			return React.createElement(Registry, { items: this.state.items })
 		} else if (this.state.page === "#venue") {

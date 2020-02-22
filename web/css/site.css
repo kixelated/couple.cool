@@ -173,7 +173,7 @@ body {
 	margin: 1rem;
 }
 
-.photos .polaroid {
+.couple .polaroid {
 	flex-basis: 24rem;
 	max-width: 32rem;
 	flex-grow: 1;
