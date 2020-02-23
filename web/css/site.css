@@ -306,3 +306,14 @@ body {
 .error {
 	color: rgb(var(--red));
 }
+
+.faq p > * {
+	padding: 0.5rem 1rem;
+}
+
+.faq p > *:first-child {
+	font-weight: bold;
+	font-family: 'Gloria Hallelujah';
+	background-color: rgb(var(--primary));
+	color: rgb(var(--white));
+}
