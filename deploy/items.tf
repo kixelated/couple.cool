@@ -258,6 +258,17 @@ ITEM
 			"Image": { "S": "classy.png" }
 		}
 ITEM
+
+		huey = <<ITEM
+		{
+			"Id": { "S": "huey" },
+			"Name": { "S": "Treats for Huey" },
+			"Description": { "S": "We dog-sit a cutie every week. Huey is always hungry." },
+			"Cost": { "N": "5" },
+			"CostDisplay": { "S": "$5" },
+			"Image": { "S": "huey.jpg" }
+		}
+ITEM
 	}
 
  	item = each.value
