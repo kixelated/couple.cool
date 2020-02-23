@@ -12,7 +12,7 @@ exports.handler = function(event, context, callback) {
           "kixelated@gmail.com",
         ],
         "rebe@couple.cool": [
-          "qpingu@gmail.com",
+          "rebeccastreicker@gmail.com",
         ],
       }
     }

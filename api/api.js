@@ -68,7 +68,7 @@ app.post('/purchase', async (req, res) => {
 
 		// Set up the paypal client
 		const paypalCreds = JSON.parse((await paypalPromise).SecretString)
-		const paypalEnv = new paypal.core.SandboxEnvironment(paypalCreds.id, paypalCreds.secret)
+		const paypalEnv = new paypal.core.LiveEnvironment(paypalCreds.id, paypalCreds.secret)
 		const paypalClient = new paypal.core.PayPalHttpClient(paypalEnv)
 
 		// Get the order information
