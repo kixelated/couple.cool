@@ -207,10 +207,10 @@ ITEM
 		gaming = <<ITEM
 		{
 			"Id": { "S": "gaming" },
-			"Name": { "S": "Upgrade Gaming PC" },
-			"Description": { "S": "Luke has an average gaming computer. That's no good. It needs more LEDs (and a faster CPU)!" },
-			"Cost": { "N": "350" },
-			"CostDisplay": { "S": "$350" },
+			"Name": { "S": "Gaming Keyboard" },
+			"Description": { "S": "Luke is using an old keyboarrrd that likes to rrepppeat the letter rrr and pp. Plus it doesn't have any cool LEDs!" },
+			"Cost": { "N": "80" },
+			"CostDisplay": { "S": "$80" },
 			"Image": { "S": "gaming.jpg" }
 		}
 ITEM
