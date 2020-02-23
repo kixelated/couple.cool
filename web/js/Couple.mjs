@@ -22,6 +22,10 @@ export class Couple extends React.Component {
 					create("img", { src: "images/couple6.jpg" }),
 					create("p", {}, "Looking as unphotogenic as possible in San Francisco"),
 				),
+				create("div", { className: "polaroid" },
+					create("img", { src: "images/couple3-alt.jpg" }),
+					create("p", {}, "Pretending to look cool while standing on rocks in front of rocks"),
+				),
 			),
 		)
 	}
