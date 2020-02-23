@@ -208,9 +208,9 @@ ITEM
 		{
 			"Id": { "S": "gaming" },
 			"Name": { "S": "Upgrade Gaming PC" },
-			"Description": { "S": "Luke has an average gaming computer. That's no good. It needs more LEDs!" },
-			"Cost": { "N": "200" },
-			"CostDisplay": { "S": "$200" },
+			"Description": { "S": "Luke has an average gaming computer. That's no good. It needs more LEDs (and a faster CPU)!" },
+			"Cost": { "N": "350" },
+			"CostDisplay": { "S": "$350" },
 			"Image": { "S": "gaming.jpg" }
 		}
 ITEM
