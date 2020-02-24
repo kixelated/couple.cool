@@ -312,7 +312,6 @@ body {
 }
 
 .faq p > *:first-child {
-	font-weight: bold;
 	font-family: 'Gloria Hallelujah';
 	background-color: rgb(var(--primary));
 	color: rgb(var(--white));

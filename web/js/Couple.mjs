@@ -3,7 +3,7 @@ const create = React.createElement
 export class Couple extends React.Component {
 	render() {
 		return create("div", { className: "couple" },
-			create("p", {}, "In true modern, millennial fasion, we met on the most romantic of platforms - a dating app. It was love at first \"swipe\" 😂. A couple of dates in, we quickly became inseparable and our bond has only continued to grow.We look forward to celebrating with you in the spring!"),
+			create("p", {}, "In true modern, millennial fasion, we met on the most romantic of platforms - a dating app. It was love at first \"swipe\" 😂. A couple of dates in, we quickly became inseparable and our bond has only continued to grow. We look forward to celebrating with you in the spring!"),
 			create("p", {}, "Here are some of the best photos we could find of ourselves. Gawk and gaze."),
 			create("div", { className: "polaroids" },
 				create("div", { className: "polaroid" },

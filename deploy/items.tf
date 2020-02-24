@@ -21,7 +21,7 @@ resource "aws_dynamodb_table_item" "items" {
 		{
 			"Id": { "S": "boulder" },
 			"Name": { "S": "Bouldering Session" },
-			"Description": { "S": "Help us get swol 💪 and climb to new heights at Dogpatch Boulder. The extra dollar is for chaulk because the pros do it." },
+			"Description": { "S": "Help us get swol 💪 and climb to new heights at Dogpatch Boulder. The extra dollar is for chalk because the pros do it." },
 			"Cost": { "N": "51" },
 			"CostDisplay": { "S": "$51" },
 			"Image": { "S": "rock.jpg" }
@@ -44,8 +44,8 @@ ITEM
 			"Id": { "S": "Hamilton" },
 			"Name": { "S": "Hamilton Tickets" },
 			"Description": { "S": "We've been wanting to see Hamilton for awhile now! It's showing in SF until end of May, so why not?" },
-			"Cost": { "N": "310" },
-			"CostDisplay": { "S": "$310" },
+			"Cost": { "N": "275" },
+			"CostDisplay": { "S": "$275" },
 			"Image": { "S": "hamilton.jpg" }
 		}
 ITEM
@@ -76,7 +76,7 @@ ITEM
 		{
 			"Id": { "S": "hotel" },
 			"Name": { "S": "One Night in Tokyo" },
-			"Description": { "S": "We need a place to stay while staying in the land of anime. The picture is from TwitchCon in San Diego but close enough." },
+			"Description": { "S": "We need a place to stay while visiting in the land of anime. The picture is from TwitchCon in San Diego but close enough." },
 			"Cost": { "N": "150" },
 			"CostDisplay": { "S": "¥17000" },
 			"Image": { "S": "hotel.jpg" }
@@ -120,7 +120,7 @@ ITEM
 		{
 			"Id": { "S": "donate" },
 			"Name": { "S": "Donate" },
-			"Description": { "S": "Doctors without Borders provides lifesaving medical humanitarian care in some of the world's most dangerous and inaccessible areas. Donate to them instead of us!" },
+			"Description": { "S": "Doctors without Borders provides lifesaving medical humanitarian care in some of the world's most dangerous and inaccessible areas. Specify the amount you'd like to give, we'll make a donation to them on your behalf and send you a photo confirmation." },
 			"Cost": { "N": "0" },
 			"CostDisplay": { "S": "custom amount" },
 			"Image": { "S": "donate.png" }
@@ -131,7 +131,7 @@ ITEM
 		{
 			"Id": { "S": "matress" },
 			"Name": { "S": "King Sized Mattress" },
-			"Description": { "S": "Because rebe takes up all of the space on the bed." },
+			"Description": { "S": "Because Rebe takes up all of the space on the bed." },
 			"Cost": { "N": "500" },
 			"CostDisplay": { "S": "$500" },
 			"Image": { "S": "bed.jpg" }
@@ -176,8 +176,8 @@ ITEM
 			"Id": { "S": "karaoke" },
 			"Name": { "S": "Night of Karaoke and Sake" },
 			"Description": { "S": "Rebe loves singing and Luke loves having a hazy recollection of what happened last night." },
-			"Cost": { "N": "100" },
-			"CostDisplay": { "S": "$100" },
+			"Cost": { "N": "80" },
+			"CostDisplay": { "S": "$80" },
 			"Image": { "S": "karaoke.jpg" }
 		}
 ITEM
@@ -252,7 +252,7 @@ ITEM
 		{
 			"Id": { "S": "cash" },
 			"Name": { "S": "Cold Hard Cash" },
-			"Description": { "S": "Feeling particularly like a free-market capitalist today? You could give us any number of slips of paper that can be exchanged for goods." },
+			"Description": { "S": "Feeling like a free-market capitalist today? You could give us any number of slips of paper that can be exchanged for goods." },
 			"Cost": { "N": "0" },
 			"CostDisplay": { "S": "custom" },
 			"Image": { "S": "classy.png" }
@@ -267,6 +267,17 @@ ITEM
 			"Cost": { "N": "5" },
 			"CostDisplay": { "S": "$5" },
 			"Image": { "S": "huey.jpg" }
+		}
+ITEM
+
+		acting = <<ITEM
+		{
+			"Id": { "S": "acting" },
+			"Name": { "S": "8 Week Acting Class for Rebe" },
+			"Description": { "S": "Help Rebe make it big and realize her dreams of stardom! This also frees up Luke's time to stream." },
+			"Cost": { "N": "100" },
+			"CostDisplay": { "S": "$100" },
+			"Image": { "S": "acting.jpg" }
 		}
 ITEM
 	}
