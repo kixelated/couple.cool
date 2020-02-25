@@ -42,7 +42,6 @@ body {
 .home .centerpiece {
 	text-align: center;
 
-	width: min(40rem, 100vw);
 	margin: 0 auto;
 }
 
