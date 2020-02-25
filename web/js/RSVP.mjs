@@ -17,7 +17,7 @@ export class RSVP extends React.Component {
 	render() {
 		if (this.state.done) {
 			if (this.state.coming === "yes") {
-				return create("p", {}, "Thank you! We're looking forward to seeing you on the fateful day!")
+				return create("p", {}, "Thank you! We're looking forward to seeing you on the fateful day! Don't forget to check out ", create("a", { href: "#gifts" }, "our registry"), " if you haven't already. 😉")
 			} else {
 				return create("p", {}, "Oh no! Sorry you can't make it; you will be missed.")
 			}
