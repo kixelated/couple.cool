@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "items" {
-	name           = "registry.items"
+	name           = "couple.cool.items"
 	billing_mode   = "PROVISIONED"
 	write_capacity = 1
 	read_capacity  = 5

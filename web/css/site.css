@@ -264,34 +264,38 @@ body {
 	height: 2rem;
 }
 
-.registry .form {
+.form {
 	display: grid;
-	grid-template-columns: 6rem 1fr 6rem;
+	grid-template-columns: minmax(6rem, auto) 1fr minmax(6rem, auto);
 	grid-gap: 1rem;
 	padding: 1rem;
 	align-items: start;
 	height: 100%;
 }
 
-.registry .form label {
+.form label {
 	grid-column: 1 / 2;
 	justify-self: right;
 	margin: 0;
 }
 
-.registry .form input {
+.form select {
 	grid-column: 2 / 4;
 }
 
-.registry .form textarea {
+.form input {
 	grid-column: 2 / 4;
 }
 
-.registry .form button {
+.form textarea {
+	grid-column: 2 / 4;
+}
+
+.form button {
 	grid-column: 1 / 2;
 }
 
-.registry .form input[type="submit"] {
+.form input[type="submit"] {
 	grid-column: 3 / 4;
 }
 

@@ -1,6 +1,6 @@
 const create = React.createElement
 
-export class Faq extends React.Component {
+export class FAQ extends React.Component {
 	render() {
 		return create("div", { className: "faq" },
 			create("p", {},

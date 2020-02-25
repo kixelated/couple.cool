@@ -13,12 +13,83 @@ app.use(express.json())
 app.get('/items', async (req, res) => {
 	try {
 		const data = await dynamodb.scan({
-			TableName: 'registry.items',
+			TableName: 'couple.cool.items',
 			AttributesToGet: [ 'Id', 'Image', 'Name', 'Description', 'Cost', 'CostDisplay', 'Sold' ],
 		}).promise()
 
 		res.status(200).json(data.Items)
 	} catch (err) {
+		console.error(err)
+		res.status(500).json({ error: err })
+	}
+})
+
+app.post('/rsvp', async (req, res) => {
+	try {
+		const code = req.body.code
+		if (!code) {
+			throw "missing code"
+		}
+
+		if (code !== "420blazeit") {
+			throw "wrong code"
+		}
+
+		if (req.body.coming !== "yes" && req.body.coming !== "no") {
+			throw "missing coming"
+		}
+
+		const coming = (req.body.coming === "yes")
+
+		const name = req.body.name
+		if (!name) {
+			throw "missing name"
+		}
+
+		const email = req.body.email
+		if (!email) {
+			throw "missing email"
+		}
+
+		const message = req.body.message || ""
+
+		let guests = parseInt(req.body.guests)
+		if (isNaN(guests) || guests < 0) {
+			throw "missing guests"
+		}
+
+		// Include the person signing up
+		guests += 1
+
+		if (guests > 5) {
+			throw "too many guests!"
+		}
+
+
+		const save = await dynamodb.putItem({
+			TableName: 'couple.cool.rsvp',
+			Item: {
+				'Email': { S: email },
+				'Name': { S: name },
+				'Guests': { N: guests.toString() },
+				'Message': { S: message },
+				'Coming': { BOOL: coming },
+			},
+			ConditionExpression: "attribute_not_exists(Email)",
+		}).promise()
+
+		if (coming) {
+			console.log(name + " is coming!")
+		} else {
+			console.log(name + " is not coming")
+		}
+
+		res.status(200).json({})
+	} catch(err) {
+		if (err.code === "ConditionalCheckFailedException") {
+			err = "duplicate email address"
+		}
+
 		console.error(err)
 		res.status(500).json({ error: err })
 	}
@@ -61,7 +132,7 @@ app.post('/purchase', async (req, res) => {
 
 		// Get the item information
 		const itemPromise = dynamodb.getItem({
-			TableName: 'registry.items',
+			TableName: 'couple.cool.items',
 			Key: { 'Id': { 'S': itemID }, },
 			AttributesToGet: [ "Id", "Name", "Cost", "Sold", ],
 		}).promise()
@@ -141,7 +212,7 @@ app.post('/purchase', async (req, res) => {
 		try {
 			// Insert an item into the payments table
 			const put = await dynamodb.putItem({
-				TableName: 'registry.payments',
+				TableName: 'couple.cool.payments',
 				Item: {
 					'Item': { S: itemID },
 					'Order': { S: orderID },
@@ -158,7 +229,7 @@ app.post('/purchase', async (req, res) => {
 			if (itemCost > 0) {
 				// Update the items table to mark it SOLD
 				const update = await dynamodb.updateItem({
-					TableName: 'registry.items',
+					TableName: 'couple.cool.items',
 					Key: {
 						'Id': { 'S': itemID },
 					},
