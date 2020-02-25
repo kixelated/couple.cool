@@ -26,12 +26,15 @@ app.get('/items', async (req, res) => {
 
 app.post('/rsvp', async (req, res) => {
 	try {
+		const secret = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()
+		const expected = JSON.parse(secret.SecretString).code
+
 		const code = req.body.code
 		if (!code) {
 			throw "missing code"
 		}
 
-		if (code !== "420blazeit") {
+		if (code !== expected) {
 			throw "wrong code"
 		}
 
@@ -65,7 +68,6 @@ app.post('/rsvp', async (req, res) => {
 			throw "too many guests!"
 		}
 
-
 		const save = await dynamodb.putItem({
 			TableName: 'couple.cool.rsvp',
 			Item: {
@@ -98,7 +100,7 @@ app.post('/rsvp', async (req, res) => {
 app.post('/purchase', async (req, res) => {
 	try {
 		// Start fetching the paypal credentials
-		const paypalPromise = secrets.getSecretValue({ SecretId: "wedding_paypal" }).promise()
+		const paypalPromise = secrets.getSecretValue({ SecretId: "couple.cool.paypal" }).promise()
 
 		const name = req.body.name
 		if (!name) {

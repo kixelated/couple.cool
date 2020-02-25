@@ -32,6 +32,7 @@ data "aws_iam_policy_document" "wedding_policy" {
 		resources = [
 			aws_dynamodb_table.items.arn,
 			aws_dynamodb_table.payments.arn,
+			aws_dynamodb_table.rsvp.arn,
 		]
 	}
 
@@ -42,7 +43,10 @@ data "aws_iam_policy_document" "wedding_policy" {
 
 	statement {
 		actions = [ "secretsmanager:GetSecretValue" ]
-		resources = [ data.aws_secretsmanager_secret.wedding_paypal.arn ]
+		resources = [
+			data.aws_secretsmanager_secret.paypal.arn,
+			data.aws_secretsmanager_secret.rsvp.arn,
+		]
 	}
 
 	statement {
@@ -51,8 +55,12 @@ data "aws_iam_policy_document" "wedding_policy" {
 	}
 }
 
-data "aws_secretsmanager_secret" "wedding_paypal" {
-	name = "wedding_paypal"
+data "aws_secretsmanager_secret" "paypal" {
+	name = "couple.cool.paypal"
+}
+
+data "aws_secretsmanager_secret" "rsvp" {
+	name = "couple.cool.rsvp"
 }
 
 resource "aws_cloudwatch_log_group" "wedding" {
