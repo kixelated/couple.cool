@@ -230,7 +230,7 @@ ITEM
 		{
 			"Id": { "S": "weed" },
 			"Name": { "S": "Dank Weed" },
-			"Description": { "S": "We rarely partake but there's a new dispensary on our street. Plus look at that dank picture." },
+			"Description": { "S": "We don't really partake but there's a new dispensary on our street so why not give it a go? It's legal in California btw." },
 			"Cost": { "N": "42" },
 			"CostDisplay": { "S": "$42.0" },
 			"Image": { "S": "weed.jpg" }

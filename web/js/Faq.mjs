@@ -17,7 +17,7 @@ export class Faq extends React.Component {
 			),
 			create("p", {},
 				create("div", {}, "Should I bring anything?"),
-				create("div", {}, "Bring something warm - sweater, jacket, scarf or other layer(s)! It probably won't rain this time of year (fingers crossed) but it's San Francisco in April near the ocean, so don't expect to sun bathe. Typical temperatures range from low 50s to mid 60s and generally foggy. Ceremony will be outdoors and we have rented the Trocadero club house for the reception but it has limited heating."),
+				create("div", {}, "Bring something warm - sweater, jacket, scarf or other layer(s)! It probably won't rain this time of year (fingers crossed) but it's San Francisco in April near the ocean, so don't expect to sun bathe. Typical temperatures range from low 50s to mid 60s and generally foggy. Ceremony will be outdoors and we have rented the Stern Grove Trocadero Clubhouse for the reception but it has limited heating."),
 			),
 			create("p", {},
 				create("div", {}, "Can I bring a gift in person?"),
