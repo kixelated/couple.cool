@@ -32,7 +32,7 @@ export class Home extends React.Component {
 					" of said cool couple, check out ",
 					create("a", { href: "#venue" }, "the venue"),
 					" or perhaps ",
-					create("a", { href: "#registry" }, "visit our registry"),
+					create("a", { href: "#gifts" }, "visit our registry"),
 					" and shower us in gifts. So many posibilities!",
 				),
 			),
