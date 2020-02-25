@@ -106,7 +106,7 @@ export class RSVP extends React.Component {
 					rows: 4,
 					value: this.state.message,
 					onChange: (e) => { this.setState({ message: e.target.value }) },
-					placeholder: 'Optionally leave a message for the "happy" couple!',
+					placeholder: 'Optional: leave a message for the "happy" couple!',
 					spellCheck: true,
 				}),
 				create("input", { type: "submit", value: "RSVP" }),
