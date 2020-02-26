@@ -24,6 +24,26 @@ app.get('/items', async (req, res) => {
 	}
 })
 
+app.get('/test', async (req, res) => {
+	const email = "qpingu@gmail.com"
+
+	const secret = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()
+	const code = JSON.parse(secret.SecretString).code
+
+	await ses.sendTemplatedEmail({
+		Destination: {
+			ToAddresses: [ email ],
+		},
+		Template: "couple_cool_invite",
+		TemplateData: JSON.stringify({
+			code: code,
+		}),
+		Source: "luke@couple.cool",
+	}).promise()
+
+	res.status(200).json({})
+})
+
 app.post('/rsvp', async (req, res) => {
 	try {
 		const secret = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()

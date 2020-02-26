@@ -74,10 +74,6 @@ body {
 	justify-self: right;
 }
 
-.home .names .fancy {
-	transform: scaleX(-1);
-}
-
 .home .names .rebe {
 	font-family: 'Dancing Script', cursive;
 	justify-self: right;

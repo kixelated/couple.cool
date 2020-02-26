@@ -115,3 +115,18 @@ resource "aws_ses_template" "thanks" {
 	text = data.local_file.email_thanks_text.content
 	subject = "Thank you for your gift!"
 }
+
+data "local_file" "email_invite_html" {
+	filename = "../email/invite.html"
+}
+
+data "local_file" "email_invite_text" {
+	filename = "../email/invite.txt"
+}
+
+resource "aws_ses_template" "invite" {
+	name = "couple_cool_invite"
+	html = data.local_file.email_invite_html.content
+	text = data.local_file.email_invite_text.content
+	subject = "Rebecca and Luke's Wedding!"
+}
