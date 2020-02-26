@@ -100,3 +100,18 @@ resource "aws_s3_bucket_policy" "store" {
 	bucket = aws_s3_bucket.emails.id
 	policy = data.aws_iam_policy_document.store.json
 }
+
+data "local_file" "email_thanks_html" {
+	filename = "../email/thanks.html"
+}
+
+data "local_file" "email_thanks_text" {
+	filename = "../email/thanks.txt"
+}
+
+resource "aws_ses_template" "thanks" {
+	name = "couple_cool_thanks"
+	html = data.local_file.email_thanks_html.content
+	text = data.local_file.email_thanks_text.content
+	subject = "Thank you for your gift!"
+}

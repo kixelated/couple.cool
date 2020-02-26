@@ -263,37 +263,22 @@ app.post('/purchase', async (req, res) => {
 			throw err
 		}
 
-		const htmlEmail = `<p>${ escapeHtml(toTitleCase(name)) }, thank you so much for you gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it.</p><p>Just a reminder, you gave us \$${ cost } for ${ item.Name.S } and left a message: <pre>${ escapeHtml(message) }</pre></p><p></p><p>THANKS AGAIN<br />&tab;-- Rebe and Luke</p>`
-
-		const textEmail = `${ toTitleCase(name) }, thank you so much for your gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it. Just a reminder, you gave us \$${ cost } for ${ item.Name.S } and left the message: "${ message }" THANKS AGAIN -- Rebe and Luke`
-
 		// Try sending an email but don't refund them if it fails!
-		await ses.sendEmail({
+		await ses.sendTemplatedEmail({
 			Destination: {
 				CcAddresses: [
 					"rebe@couple.cool",
 					"luke@couple.cool",
 				],
-				ToAddresses: [
-					email,
-				],
+				ToAddresses: [ email ],
 			},
-			Message: {
-				Body: {
-					Html: {
-						Charset: "UTF-8",
-						Data: htmlEmail,
-					},
-					Text: {
-						Charset: "UTF-8",
-						Data: textEmail,
-					},
-				},
-				Subject: {
-					Charset: "UTF-8",
-					Data: "Thank you for your gift!",
-				},
-			},
+			Template: "couple_cool_thanks",
+			TemplateData: JSON.stringify({
+				name: escapeHtml(toTitleCase(name)),
+				cost: cost,
+				item: item.Name.S,
+				message: escapeHtml(message),
+			}),
 			Source: "luke@couple.cool",
 		}).promise()
 

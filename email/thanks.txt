@@ -1,0 +1,7 @@
+{{name}}, thank you so much for your gift! I'm sure that we're going to LOVE it! We will send you a personalized picture once we buy it.
+
+Just a reminder, you gave us ${{cost}} for {{item}} and left the message:
+	{{message}}
+
+THANKS AGAIN!
+	-- Rebe and Luke`
