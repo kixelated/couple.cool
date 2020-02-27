@@ -249,8 +249,8 @@ a, a:hover {
 }
 
 .registry .polaroid {
+	flex-grow: 0;
 	flex-basis: 16rem;
-	max-width: 20rem;
 }
 
 .registry .pay .pal {
