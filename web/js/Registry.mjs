@@ -31,7 +31,7 @@ export class Registry extends React.Component {
 		return create('div', { className: "registry" },
 			overlay,
 			create('p', {}, "Welcome to the gift shoppe!"),
-			create('p', {}, "You can pay for one of the below items/experiences and we'll send you a personalized photo once we buy it. You can always bring a gift in person instead!"),
+			create('p', {}, "You can pay for one of the below items/experiences and we'll send you a personalized photo once we buy it. Remember, you can always bring a gift in person instead."),
 			create('div', { className: "items polaroids" }, items),
 		)
 	}
@@ -284,10 +284,10 @@ class RegistryFullItem extends React.Component {
 class RegistryItemPrice extends React.Component {
 	render() {
 		if (!this.props.item.Sold) {
-			return create('p', { className: "cost"}, this.props.item.CostDisplay.S)
+			return create('div', { className: "cost"}, this.props.item.CostDisplay.S)
 		}
 
-		return create('p', { className: "buyer" }, "TAKEN!")
+		return create('div', { className: "buyer" }, "TAKEN!")
 	}
 }
 
@@ -300,7 +300,7 @@ class RegistryItem extends React.Component {
 
 		return create('a', { className: "polaroid", href: "#", onClick: setSelected },
 			create('img', { src: "images/" + this.props.item.Image.S }),
-			create('p', { className: "name" }, this.props.item.Name.S),
+			create('div', { className: "name" }, this.props.item.Name.S),
 			create(RegistryItemPrice, { item: this.props.item })
 		)
 	}

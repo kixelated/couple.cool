@@ -7,13 +7,15 @@
 	--red: 181, 0, 0;
 }
 
-a, a:hover {
-	color: rgb(var(--accent));
-}
-
 body {
 	background-color: rgb(var(--grey));
 	color: rgb(var(--black));
+
+	font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+a, a:hover {
+	color: rgb(var(--accent));
 }
 
 .wrapper {
@@ -23,7 +25,7 @@ body {
 
 .banner {
 	background-color: rgb(var(--primary));
-	background: linear-gradient(rgba(var(--primary), 0.95), rgba(var(--primary), 1.0));
+	background: linear-gradient(rgba(var(--primary), 0.90), rgba(var(--primary), 1.0));
 }
 
 .banner a {
@@ -36,7 +38,7 @@ body {
 	background-color: rgb(var(--white));
 	box-shadow: 0 0 10rem rgba(var(--primary), 0.2);
 
-	padding: 2rem;
+	padding: 1.5rem;
 }
 
 .home .centerpiece {
@@ -75,7 +77,7 @@ body {
 }
 
 .home .names .rebe {
-	font-family: 'Dancing Script', cursive;
+	font-family: 'Dancing Script', serif;
 	justify-self: right;
 }
 
@@ -85,7 +87,7 @@ body {
 }
 
 .home .names .luke {
-	font-family: 'Gloria Hallelujah', cursive;
+	font-family: 'Gloria Hallelujah', sans-serif;
 	justify-self: left;
 }
 
@@ -100,7 +102,7 @@ body {
 }
 
 .home .intro {
-	margin-top: 4rem;
+	margin-top: 2rem;
 }
 
 .registry .overlay {
@@ -161,20 +163,6 @@ body {
 	padding: 1rem;
 }
 
-
-.registry .polaroids .polaroid {
-	width: 16rem;
-	padding: 1rem;
-	margin: 1rem;
-}
-
-.couple .polaroid {
-	flex-basis: 24rem;
-	max-width: 32rem;
-	flex-grow: 1;
-	margin: 2rem;
-}
-
 .polaroids {
 	display: flex;
 	flex-wrap: wrap;
@@ -185,9 +173,11 @@ body {
 .polaroid {
 	display: inline-block;
 
-	background: #fff;
-	box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+	background-color: rgba(var(--white));
+	box-shadow: 0.1rem 0.2rem 0.4rem rgba(var(--black), 0.25);
+
 	padding: 1rem;
+	margin: 1rem;
 
 	font-family: 'Gloria Hallelujah', cursive;
 	font-size: 1.5rem;
@@ -198,6 +188,14 @@ body {
 	transition: transform 0.15s linear, box-shadow 0.15s linear;
 
 	text-align: center;
+
+	flex-basis: 18rem;
+	max-width: 30rem;
+	flex-grow: 1;
+}
+
+.polaroid > img {
+	margin-bottom: 1rem;
 }
 
 .polaroids .polaroid:nth-child(even) {
@@ -223,7 +221,7 @@ body {
 .polaroid:hover {
 	transform: scale(1.2) !important;
 	z-index: 5;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+	box-shadow: 0.1rem 0.2rem 0.4rem rgba(var(--black), 0.5);
 	color: inherit;
 	text-decoration: none;
 }
@@ -231,11 +229,6 @@ body {
 .polaroid img {
 	object-fit: cover;
 	width: 100%;
-}
-
-.polaroid p {
-	margin-top: 1rem;
-	margin-bottom: 0;
 }
 
 .polaroid .name {
@@ -249,6 +242,11 @@ body {
 .registry .buyer {
 	color: rgb(var(--red));
 	font-size: 1rem;
+}
+
+.registry .polaroid {
+	flex-basis: 16rem;
+	max-width: 28rem;
 }
 
 .registry .pay .pal {
@@ -295,23 +293,31 @@ body {
 	grid-column: 3 / 4;
 }
 
-.venue .polaroid {
-	flex-basis: 24rem;
-	margin: 2rem;
-	flex-grow: 1;
-	max-width: 32rem;
-}
-
 .error {
 	color: rgb(var(--red));
 }
 
-.faq p > * {
-	padding: 0.5rem 1rem;
+.section {
+	margin-bottom: 1.5rem;
 }
 
-.faq p > *:first-child {
+.section > p {
+	margin: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
 	font-family: 'Gloria Hallelujah';
-	background-color: rgb(var(--primary));
 	color: rgb(var(--white));
+	font-weight: normal;
+
+	padding: 0.5rem 1rem;
+	margin-bottom: 1rem;
+
+	background-color: rgb(var(--primary));
+	background: linear-gradient(rgba(var(--primary), 0.9), rgba(var(--primary), 1.0));
+
+	box-shadow: 0.1rem 0.1rem 0 rgba(var(--primary), 0.5);
+
+	border: 0.1rem solid rgb(var(--white));
+	border-radius: 0.5rem;
 }
