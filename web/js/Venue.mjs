@@ -6,7 +6,7 @@ export class Venue extends React.Component {
 			create("p", { className: "section" }, 
 				create("h3", {}, "Stern Grove"),
 				create("p", {}, "We're getting married in Stern Grove, a beautiful park in San Francisco. We've rented out the a small portion of this sweet park. Don't forget to bring your sweater!"),
-				create("p", {}, "The ceremony, lunch, and part will be taking place at the Trocadero Clubhouse. It's a large yellow building with a parking lot and a cute lake, relatively close to the amphitheater."),
+				create("p", {}, "The ceremony, lunch, and party will take place at the Trocadero Clubhouse. It's a large yellow building with a parking lot and a cute lake, relatively close to the amphitheater."),
 				create("div", { className: "polaroids" }, 
 					create("div", { className: "polaroid" }, 
 						create("img", { src: "images/stern2.jpg" }),

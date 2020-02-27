@@ -31,10 +31,14 @@ a, a:hover {
 .banner a {
 	display: inline-block;
 	color: rgb(var(--white));
-	padding: 1rem 2rem;
+	padding: 1rem;
 }
 
-#content {
+.banner .selected {
+	font-weight: bold;
+}
+
+.content {
 	background-color: rgb(var(--white));
 	box-shadow: 0 0 10rem rgba(var(--primary), 0.2);
 
@@ -246,7 +250,7 @@ a, a:hover {
 
 .registry .polaroid {
 	flex-basis: 16rem;
-	max-width: 28rem;
+	max-width: 20rem;
 }
 
 .registry .pay .pal {

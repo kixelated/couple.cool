@@ -5,18 +5,13 @@ import { Venue } from "./Venue.mjs"
 import { FAQ } from "./FAQ.mjs"
 import { RSVP } from "./RSVP.mjs"
 
+const create = React.createElement
+
 export class Content extends React.Component {
 	constructor(props) {
 		super(props)
 
-		window.addEventListener("hashchange", () => {
-			this.setState({
-				page: window.location.hash || "#home"
-			})
-		})
-
 		this.state = {
-			page: window.location.hash || "#home",
 			items: [],
 		}
 
@@ -28,22 +23,28 @@ export class Content extends React.Component {
 	}
 
 	render() {
-		let content
+		return create("div", { className: "wrapper" }, 
+			create("div", { className: "content" },
+				this.renderInner(),
+			),
+		)
+	}
 
-		if (this.state.page === "#home") {
-			return React.createElement(Home)
-		} else if (this.state.page === "#couple") {
-			return React.createElement(Couple)
-		} else if (this.state.page === "#gifts") {
-			return React.createElement(Registry, { items: this.state.items })
-		} else if (this.state.page === "#venue") {
-			return React.createElement(Venue)
-		} else if (this.state.page === "#faq") {
-			return React.createElement(FAQ)
-		} else if (this.state.page === "#rsvp") {
-			return React.createElement(RSVP)
+	renderInner() {
+		if (this.props.page === "#home") {
+			return create(Home)
+		} else if (this.props.page === "#couple") {
+			return create(Couple)
+		} else if (this.props.page === "#gifts") {
+			return create(Registry, { items: this.state.items })
+		} else if (this.props.page === "#venue") {
+			return create(Venue)
+		} else if (this.props.page === "#faq") {
+			return create(FAQ)
+		} else if (this.props.page === "#rsvp") {
+			return create(RSVP)
 		} else {
-			return React.createElement("div", { className: "error" }, "Unknown page")
+			return create("div", { className: "error" }, "Unknown page")
 		}
 	}
 }

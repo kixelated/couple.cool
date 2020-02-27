@@ -24,28 +24,15 @@
 </head>
 
 <body>
-	<div class="banner">
-		<div class="wrapper">
-			<a href="#home">😎</a>
-			<a href="#couple">Couple</a>
-			<a href="#venue">Venue</a>
-			<a href="#faq">FAQ</a>
-			<a href="#rsvp">RSVP</a>
-			<a href="#gifts">Gifts</a>
-		</div>
-	</div>
-	<div class="wrapper">
-		<div id="content">
-		</div>
-	</div>
+	<div id="app"></div>
 
 	<script type="module">
-		import { Content } from "./js/Content.mjs"
+		import { App } from "./js/App.mjs"
 
-		const container = document.getElementById('content')
-		const content = React.createElement(Content, { page: window.location.hash || "home" })
+		const container = document.getElementById('app')
+		const app = React.createElement(App, { page: window.location.hash || "home" })
 
-		ReactDOM.render(content, container)
+		ReactDOM.render(app, container)
 	</script>
 </body>
 
