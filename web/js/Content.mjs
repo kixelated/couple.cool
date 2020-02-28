@@ -2,6 +2,7 @@ import { Home } from "./Home.mjs"
 import { Couple } from "./Couple.mjs"
 import { Registry } from "./Registry.mjs"
 import { Venue } from "./Venue.mjs"
+import { Schedule } from "./Schedule.mjs"
 import { FAQ } from "./FAQ.mjs"
 import { RSVP } from "./RSVP.mjs"
 
@@ -39,6 +40,8 @@ export class Content extends React.Component {
 			return create(Registry, { items: this.state.items })
 		} else if (this.props.page === "#venue") {
 			return create(Venue)
+		} else if (this.props.page === "#schedule") {
+			return create(Schedule)
 		} else if (this.props.page === "#faq") {
 			return create(FAQ)
 		} else if (this.props.page === "#rsvp") {
