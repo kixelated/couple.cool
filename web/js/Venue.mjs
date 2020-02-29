@@ -36,7 +36,8 @@ export class Venue extends React.Component {
 
 				create("p", {}, create("strong", {}, "If you're taking the bus"), " the 23 (Monterey) and the 28 (19th Avenue) stop right at the main etrance."),
 
-				create("p", {}, create("strong", {}, "Please note:"), " Because it sits near the southwestern edge of the city, public transit to Stern Grove can be time-consuming and Muni runs a lot less frequently on weekends. Also note: please IGNORE the 'Wawona Street' directions on the Google map below. Wawona Street directions are INCORRECT and you should follow our directions above."),  
+				create("p", {}, create("strong", {}, "Please note:"), " Because it sits near the southwestern edge of the city, public transit to Stern Grove can be time-consuming and Muni runs a lot less frequently on weekends."),
+				create("p", {}, create("strong", {}, "IMPORTANT:"), " Please IGNORE the 'Wawona Street' directions on the Google map below. Wawona Street directions are INCORRECT and you should follow our directions above."),  
 
 				create("iframe", {
 					frameBorder: 0,

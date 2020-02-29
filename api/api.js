@@ -25,18 +25,23 @@ app.get('/items', async (req, res) => {
 })
 
 app.get('/test', async (req, res) => {
-	const email = "qpingu@gmail.com"
+	const email = "rebeccastreicker@gmail.com"
 
-	const secret = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()
-	const code = JSON.parse(secret.SecretString).code
+	const resp = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()
+	const secret = JSON.parse(resp.SecretString)
 
 	await ses.sendTemplatedEmail({
 		Destination: {
 			ToAddresses: [ email ],
+			CcAddresses: [
+				"rebe@couple.cool",
+				"luke@couple.cool",
+			],
 		},
 		Template: "couple_cool_invite",
 		TemplateData: JSON.stringify({
-			code: code,
+			code: secret.code,
+			phone: secret.phone,
 		}),
 		Source: "luke@couple.cool",
 	}).promise()
