@@ -41,7 +41,7 @@ ITEM
 
 		hamilton = <<ITEM
 		{
-			"Id": { "S": "Hamilton" },
+			"Id": { "S": "hamilton" },
 			"Name": { "S": "Hamilton Tickets" },
 			"Description": { "S": "We've been wanting to see Hamilton for awhile now! It's showing in SF until end of May, so why not?" },
 			"Cost": { "N": "275" },
