@@ -153,7 +153,7 @@ ITEM
 		{
 			"Id": { "S": "museum" },
 			"Name": { "S": "Museum Tickets" },
-			"Description": { "S": "Entrance fee to a museum in Japon during our honeymoon. Let's get cultured!" },
+			"Description": { "S": "Entrance fee to a museum in Japan during our honeymoon. Let's get cultured!" },
 			"Cost": { "N": "40" },
 			"CostDisplay": { "S": "$40" },
 			"Image": { "S": "museum.jpg" }

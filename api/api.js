@@ -25,7 +25,7 @@ app.get('/items', async (req, res) => {
 })
 
 app.get('/test', async (req, res) => {
-	const email = "rebeccastreicker@gmail.com"
+	const email = "qpingu@gmail.com"
 
 	const resp = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()
 	const secret = JSON.parse(resp.SecretString)

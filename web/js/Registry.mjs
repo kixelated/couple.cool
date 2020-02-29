@@ -204,7 +204,7 @@ class RegistryBuyForm extends React.Component {
 		}
 
 		return create("div", {},
-			create("p", {}, "Enter your details if you want to buy this item for us. We'll send you a personalized picture when the deed is done."),
+			create("p", {}, "Enter your details if you want to buy this item for us. We'll send you a personalized picture when the purchase is done."),
 			create('form', { onSubmit: goNext, className: "form" },
 				create('label', {}, "Amount:"),
 				create('input', {

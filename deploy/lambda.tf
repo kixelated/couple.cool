@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "wedding_policy" {
 	}
 
 	statement {
-		actions = [ "ses:SendEmail", "ses:SendRawEmail" ]
+		actions = [ "ses:SendTemplatedEmail", ]
 		resources = [ "*" ]
 	}
 }
