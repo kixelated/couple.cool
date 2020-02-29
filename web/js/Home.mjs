@@ -38,9 +38,9 @@ export class Home extends React.Component {
 					". ",
 					"Finally, make sure you ",
 					create("a", { href: "#rsvp" }, "RSVP"),
-					" (even if you can't make it) and purhaps ",
+					" (even if you can't make it) and perhaps ",
 					create("a", { href: "#gifts" }, "visit our registry"),
-					" to shower us in gifts. So many posibilities!",
+					" to shower us in gifts. So many possibilities!",
 				),
 			),
 		)
