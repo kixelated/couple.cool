@@ -5,7 +5,7 @@ export class Couple extends React.Component {
 		return create("div", { className: "couple" },
 			create("div", { className: "section" },
 				create("h3", {}, "Origin Story"),
-				create("p", {}, "In true modern, millennial fasion, we met on the most romantic of platforms - a dating app. It was love at first \"swipe\" 😂. A couple of dates in, we quickly became inseparable and our bond has only continued to grow. We look forward to celebrating with you in the spring!"),
+				create("p", {}, "In true modern, millennial fashion, we met on the most romantic of platforms - a dating app. It was love at first \"swipe\" 😂. A couple of dates in, we quickly became inseparable and our bond has only continued to grow. We look forward to celebrating with you in the spring!"),
 			),
 			create("div", { className: "section" },
 				create("h3", {}, "Photos"),
