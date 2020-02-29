@@ -28,14 +28,14 @@ a, a:hover {
 	background: linear-gradient(rgba(var(--primary), 0.90), rgba(var(--primary), 1.0));
 }
 
-.banner a {
+.banner .selected {
+	font-weight: bold;
+}
+
+.banner .nav a {
 	display: inline-block;
 	color: rgb(var(--white));
 	padding: 1rem;
-}
-
-.banner .selected {
-	font-weight: bold;
 }
 
 .content {
@@ -324,4 +324,9 @@ h1, h2, h3, h4, h5, h6 {
 
 	border: 0.1rem solid rgb(var(--white));
 	border-radius: 0.5rem;
+}
+
+.timeslot {
+	font-weight: bold;
+	border-bottom: 0.1rem solid rgba(var(--black), 0.8);
 }
