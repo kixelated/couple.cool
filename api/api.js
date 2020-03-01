@@ -106,9 +106,9 @@ app.post('/rsvp', async (req, res) => {
 
 		let emailBody;
 		if (coming) {
-			emailBody = `${name} (${email}) and ${ guests - 1 } guests are coming! They said: <pre>${message}</pre>`,
+			emailBody = `${name} (${email}) and ${ guests - 1 } guests are coming! They said: <pre>${message}</pre>`
 		} else {
-			emailBody = `${name} (${email}) are not coming. They said: <pre>${message}</pre>`,
+			emailBody = `${name} (${email}) are not coming. They said: <pre>${message}</pre>`
 		}
 
 		await ses.sendEmail({
