@@ -95,15 +95,20 @@ app.post('/rsvp', async (req, res) => {
 			throw "too many guests!"
 		}
 
+		const item = {
+			'Email': { S: email },
+			'Name': { S: name },
+			'Count': { N: guests.toString() },
+			'Coming': { BOOL: coming },
+		}
+
+		if (message != ""){
+			item['Message'] = { S: message }
+		}
+
 		const save = await dynamodb.putItem({
 			TableName: 'couple.cool.rsvp',
-			Item: {
-				'Email': { S: email },
-				'Name': { S: name },
-				'Count': { N: guests.toString() },
-				'Message': { S: message },
-				'Coming': { BOOL: coming },
-			},
+			Item: item,
 			ConditionExpression: "attribute_not_exists(Email)",
 		}).promise()
 
