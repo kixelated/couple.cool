@@ -30,8 +30,8 @@ app.get('/test', async (req, res) => {
 	const resp = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()
 	const secret = JSON.parse(resp.SecretString)
 
-	await Promise.all(emails.map((email) => {
-		return ses.sendTemplatedEmail({
+	for (const email of emails) {
+		await ses.sendTemplatedEmail({
 			Destination: {
 				ToAddresses: [ email ],
 				CcAddresses: [ "rebe@couple.cool" ],
@@ -43,7 +43,10 @@ app.get('/test', async (req, res) => {
 			}),
 			Source: "luke@couple.cool",
 		}).promise()
-	}))
+
+		// Sleep for a second to avoid getting rate limited
+		await new Promise(resolve => setTimeout(resolve, 1000))
+	}
 
 	res.status(200).json({})
 })
