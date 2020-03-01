@@ -25,26 +25,25 @@ app.get('/items', async (req, res) => {
 })
 
 app.get('/test', async (req, res) => {
-	const email = "qpingu@gmail.com"
+	const emails = []
 
 	const resp = await secrets.getSecretValue({ SecretId: "couple.cool.rsvp" }).promise()
 	const secret = JSON.parse(resp.SecretString)
 
-	await ses.sendTemplatedEmail({
-		Destination: {
-			ToAddresses: [ email ],
-			CcAddresses: [
-				"rebe@couple.cool",
-				"luke@couple.cool",
-			],
-		},
-		Template: "couple_cool_invite",
-		TemplateData: JSON.stringify({
-			code: secret.code,
-			phone: secret.phone,
-		}),
-		Source: "luke@couple.cool",
-	}).promise()
+	await Promise.all(emails.map((email) => {
+		return ses.sendTemplatedEmail({
+			Destination: {
+				ToAddresses: [ email ],
+				CcAddresses: [ "rebe@couple.cool" ],
+			},
+			Template: "couple_cool_invite",
+			TemplateData: JSON.stringify({
+				code: secret.code,
+				phone: secret.phone,
+			}),
+			Source: "luke@couple.cool",
+		}).promise()
+	}))
 
 	res.status(200).json({})
 })
@@ -98,18 +97,38 @@ app.post('/rsvp', async (req, res) => {
 			Item: {
 				'Email': { S: email },
 				'Name': { S: name },
-				'Guests': { N: guests.toString() },
+				'Count': { N: guests.toString() },
 				'Message': { S: message },
 				'Coming': { BOOL: coming },
 			},
 			ConditionExpression: "attribute_not_exists(Email)",
 		}).promise()
 
+		let emailBody;
 		if (coming) {
-			console.log(name + " is coming!")
+			emailBody = `${name} (${email}) and ${ guests - 1 } guests are coming! They said: <pre>${message}</pre>`,
 		} else {
-			console.log(name + " is not coming")
+			emailBody = `${name} (${email}) are not coming. They said: <pre>${message}</pre>`,
 		}
+
+		await ses.sendEmail({
+			Destination: {
+				ToAddresses: [ "rebe@couple.cool" ],
+			},
+			Message: {
+				Body: {
+					Html : {
+						Charset: "UTF-8",
+						Data: emailBody,
+					}
+				},
+				Subject: {
+					Charset: "UTF-8",
+					Data: "New RSVP"
+				},
+			},
+			Source: "luke@couple.cool",
+		}).promise()
 
 		res.status(200).json({})
 	} catch(err) {
