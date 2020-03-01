@@ -63,7 +63,7 @@ export class RSVP extends React.Component {
 		}
 
 		return create('div', { className: "rsvp" }, 
-			create('p', {}, "Let us know if you coming on April 25th (starting at 11:15am)! Check your email for the invite code."),
+			create('p', {}, "Let us know if you're coming on April 25th (starting at 11:15am)! Check your email for the invite code."),
 
 			create('form', { onSubmit: (e) => { e.preventDefault(); submit(); }, className: "form" },
 				create('label', {}, "Are you coming?"),
